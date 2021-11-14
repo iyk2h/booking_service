@@ -27,6 +27,6 @@ public class Facility {
     private String place;
 
     @Column(length = 20, nullable = false)
-    private String sacle;
+    private String scale;
 
 }

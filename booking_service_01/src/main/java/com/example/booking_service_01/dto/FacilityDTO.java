@@ -13,5 +13,5 @@ public class FacilityDTO {
     private Integer fno;
     private String name;
     private String place;
-    private String sacle; 
+    private String scale; 
 }
