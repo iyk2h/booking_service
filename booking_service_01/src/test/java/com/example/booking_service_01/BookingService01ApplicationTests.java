@@ -3,16 +3,15 @@ package com.example.booking_service_01;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.booking_service_01.dto.AdminDTO;
+import com.example.booking_service_01.dto.ManageDTO;
 import com.example.booking_service_01.entity.Admin;
 import com.example.booking_service_01.entity.Manage;
 import com.example.booking_service_01.mapper.BookingMapper;
-import com.example.booking_service_01.repository.AdminRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +29,7 @@ class BookingService01ApplicationTests {
     public void eToD(){
 		/*given */
 		final Admin admin= Admin.builder()
-			.id("id")
+			.aid("id")
 			.pw("pw")
 			.name("name")
 			.phone("phone")
@@ -39,7 +38,7 @@ class BookingService01ApplicationTests {
 		/*when */
         final AdminDTO adminDto = BookingMapper.INSTANCE.admin_To_DTO(admin);
 		/*then */
-        assertEquals("id", adminDto.getId());
+        assertEquals("id", adminDto.getAid());
         assertEquals("pw", adminDto.getPw());
         assertEquals("name", adminDto.getName());
         assertEquals("phone", adminDto.getPhone());
@@ -50,7 +49,7 @@ class BookingService01ApplicationTests {
     void DtoE() {
 		/*given */
 		final AdminDTO adminDTO = AdminDTO.builder()
-			.id("id")
+			.aid("id")
 			.pw("pw")
 			.name("name")
 			.phone("phone")
@@ -59,7 +58,7 @@ class BookingService01ApplicationTests {
 		/*when */
 		final Admin admin = BookingMapper.INSTANCE.adminDto_To_Entity(adminDTO);
 		/*then*/
-		assertEquals("id", admin.getId());
+		assertEquals("id", admin.getAid());
         assertEquals("pw", admin.getPw());
         assertEquals("name", admin.getName());
         assertEquals("phone", admin.getPhone());
@@ -67,13 +66,24 @@ class BookingService01ApplicationTests {
         System.out.println("DTO To Entity all pass");
     }
 
-	// @Autowired
-	// AdminRepository adminRepository;
+	@Test
+	void Managertest() {
+		final ManageDTO manageDTO = ManageDTO.builder()
+			.fno(1)
+			.aid("test")
+			.mno(1)
+			.build();
 
-	// @Test
-    // public void admin_test() {
-	// 	Admin admin = adminRepository.findById("a").get();
-	// 	AdminDTO adminDTO = BookingMapper.INSTANCE.admin_To_DTO(admin);
-	// 	log.info(adminDTO.toString());
-    // }
+
+		final Manage manage = BookingMapper.INSTANCE.manageDTO_To_Entity(manageDTO);
+		log.info(manage.toString());
+
+		assertEquals(1, manage.getFacility().getFno());
+		assertEquals("test", manage.getAdmin().getAid());
+		assertEquals(1, manage.getMno());
+
+		System.out.println(manage.getAdmin().getAid());
+        System.out.println("DTO To Entity all pass");
+	}
 }
+

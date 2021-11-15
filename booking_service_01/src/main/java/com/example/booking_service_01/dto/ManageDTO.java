@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ManageDTO {
     private Integer mno;
-    private String id;
+    private String aid;
     private Integer fno;
     private Date start_time;
     private Date end_time;

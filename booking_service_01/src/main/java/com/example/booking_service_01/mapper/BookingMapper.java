@@ -32,10 +32,10 @@ public interface BookingMapper {
     FacilityDTO facility_To_DTO(Facility facility);
     Facility facilityDTO_To_Entity(FacilityDTO facilityDTO);
 
-    @Mapping(target = "id", source = "admin.id")
+    @Mapping(target = "aid", source = "admin.aid")
     @Mapping(target = "fno", source = "facility.fno")
     ManageDTO manage_To_DTO(Manage manage);
-    @Mapping(target = "admin.id", source = "id")
+    @Mapping(target = "admin.aid", source = "aid")
     @Mapping(target = "facility.fno", source = "fno")
     Manage manageDTO_To_Entity(ManageDTO manageDTO);
     
