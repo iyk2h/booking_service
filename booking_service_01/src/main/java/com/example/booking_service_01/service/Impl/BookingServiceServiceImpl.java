@@ -12,6 +12,7 @@ import com.example.booking_service_01.repository.FacilityRepository;
 import com.example.booking_service_01.repository.ManageRepository;
 import com.example.booking_service_01.service.BookingServiceService;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,21 +44,8 @@ public class BookingServiceServiceImpl implements BookingServiceService{
 
     @Override
     public Integer insertAdminDto(AdminDTO adminDTO) {
-        System.out.println("insert"); 
-        System.out.println(adminDTO);
-        System.out.println(adminDTO.getAno());
-
         Admin admin = BookingMapper.INSTANCE.adminDto_To_Entity(adminDTO);
-
-        System.out.println("dto to entity"); 
-        System.out.println(admin);
-        System.out.println(admin.getAno());
-
         adminRepository.save(admin);
-        
-        System.out.println("saved"); 
-        System.out.println(adminDTO);
-        
         return admin.getAno();
     }
 
@@ -65,6 +53,24 @@ public class BookingServiceServiceImpl implements BookingServiceService{
     public void delete(AdminDTO adminDTO) {
         Admin admin = BookingMapper.INSTANCE.adminDto_To_Entity(adminDTO);
         adminRepository.delete(admin);
+    }
+
+    @Override
+    public Integer update(Integer ano, AdminDTO adminDTO) {
+        System.out.println("update"); 
+        System.out.println(adminDTO.getPw());
+        
+        Admin admin = BookingMapper.INSTANCE.adminDto_To_Entity(adminDTO);
+
+        System.out.println("dto to entity"); 
+        System.out.println(admin.getPw());
+        System.out.println(adminDTO.getPw());
+
+        adminRepository.save(admin);
+        System.out.println("updated"); 
+        System.out.println(adminDTO);
+        System.out.println(adminDTO.getPw());
+        return admin.getAno();
     }
 
     //facility

@@ -11,14 +11,15 @@ import com.example.booking_service_01.entity.Facility;
 import com.example.booking_service_01.entity.Manage;
 import com.example.booking_service_01.entity.Students;
 
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface BookingMapper {
-    BookingMapper INSTANCE = Mappers.getMapper(BookingMapper.class); // 2
-
+    BookingMapper INSTANCE = Mappers.getMapper(BookingMapper.class);
     AdminDTO admin_To_DTO(Admin admin);
     Admin adminDto_To_Entity(AdminDTO adminDTO);
 

@@ -40,29 +40,29 @@ public class AdminController {
     //Insert
     @PostMapping(path = "", produces = "application/json")
     public ResponseEntity<?> insertAdmin(@RequestBody AdminDTO adminDTO) {
-        System.out.println("insert"); 
-        System.out.println(adminDTO);
-        System.out.println(adminDTO.getAno());
         if(adminDTO.getAno()!=null) {
-            if (!bookingServiceService.checkAno(adminDTO.getAno())) {
-                System.out.println("if"); 
-                System.out.println(adminDTO);
-                System.out.println(adminDTO.getAno());
-            }
-            else
+            if (bookingServiceService.checkAno(adminDTO.getAno()))
                 return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
             return new ResponseEntity<>(bookingServiceService.findByAno(bookingServiceService.insertAdminDto(adminDTO)), HttpStatus.CREATED);
         }
         else{
-            System.out.println("else"); 
-            System.out.println(adminDTO);
-            System.out.println(adminDTO.getAno());
             return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
         }
     }
     //Login
 
     //Update   
+    @PutMapping(path = "/{ano}/", produces = "application/json")
+    public ResponseEntity<?> updateAdmin(@PathVariable("ano") Integer ano, @RequestBody AdminDTO adminDTO) {
+        if(adminDTO != null){
+            if(ano != adminDTO.getAno() && adminDTO.getAno()==null){
+                return new ResponseEntity<>("Update fail", HttpStatus.NOT_ACCEPTABLE); 
+            }
+            return new ResponseEntity<>(bookingServiceService.findByAno(bookingServiceService.update(ano, adminDTO)), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>("Update fail", HttpStatus.NOT_ACCEPTABLE);
+    }
 
     //Delete
     @DeleteMapping(path="/{ano}", produces = "application/json")

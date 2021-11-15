@@ -13,4 +13,5 @@ public interface BookingServiceService {
     boolean checkAno(Integer ano);
     Integer insertAdminDto(AdminDTO adminDTO);
     void delete(AdminDTO admindDto);
+    Integer update(Integer ano, AdminDTO adminDTO);
 }
