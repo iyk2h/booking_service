@@ -61,6 +61,12 @@ public class BookingServiceServiceImpl implements BookingServiceService{
         return admin.getAno();
     }
 
+    @Override
+    public void delete(AdminDTO adminDTO) {
+        Admin admin = BookingMapper.INSTANCE.adminDto_To_Entity(adminDTO);
+        adminRepository.delete(admin);
+    }
+
     //facility
     @Override
     public FacilityDTO findByFno(Integer fno) {

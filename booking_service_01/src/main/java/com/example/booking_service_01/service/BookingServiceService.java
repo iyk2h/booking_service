@@ -12,4 +12,5 @@ public interface BookingServiceService {
     AdminDTO findByAno(Integer ano);
     boolean checkAno(Integer ano);
     Integer insertAdminDto(AdminDTO adminDTO);
+    void delete(AdminDTO admindDto);
 }
