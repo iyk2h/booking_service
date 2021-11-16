@@ -2,8 +2,6 @@ package com.example.booking_service_01.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -21,7 +19,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "admin_models")
 public class Admin {
     @Id
-    // @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(length = 20, nullable = false)
     private Integer ano;
 
