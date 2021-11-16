@@ -7,6 +7,8 @@ import com.example.booking_service_01.service.StudentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,17 @@ public class StudentsController {
     StudentsService studentsService;
     @Autowired
     StudentsRepository studentsRepository;
+    //Select 
+    @GetMapping(path="/{sid}", produces = "application/json")
+    public ResponseEntity<?> getAno(@PathVariable("sid") Integer sid) {
+        if(!studentsService.checkSid(sid)) {
+            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else {
+            StudentsDTO studentsDTO = studentsService.findBySid(sid);
+            return new ResponseEntity<>(studentsDTO, HttpStatus.OK);
+        }
+    }
     //Insert
     @PostMapping(path = "/join", produces = "application/json")
     public ResponseEntity<?> insertAdmin(@RequestBody StudentsDTO studentsDTO) {
