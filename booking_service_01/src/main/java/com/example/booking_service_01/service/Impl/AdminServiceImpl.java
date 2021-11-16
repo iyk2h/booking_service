@@ -10,19 +10,16 @@ import com.example.booking_service_01.mapper.BookingMapper;
 import com.example.booking_service_01.repository.AdminRepository;
 import com.example.booking_service_01.repository.FacilityRepository;
 import com.example.booking_service_01.repository.ManageRepository;
-import com.example.booking_service_01.service.BookingServiceService;
+import com.example.booking_service_01.service.AdminService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BookingServiceServiceImpl implements BookingServiceService{
+public class AdminServiceImpl implements AdminService{
     @Autowired
     private AdminRepository adminRepository;
-	@Autowired
-    private FacilityRepository facilityRepository;
-	@Autowired
-	private ManageRepository manageRepository;
+
     
     //admin
     @Override
@@ -55,26 +52,19 @@ public class BookingServiceServiceImpl implements BookingServiceService{
     }
 
     @Override
+    public boolean admin_login(Integer ano ,String pw) {
+        Admin admin = adminRepository.findByAno(ano);
+        if(admin.getPw().equals(pw)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    @Override
     public Integer update(AdminDTO adminDTO) {
         Admin admin = BookingMapper.INSTANCE.adminDto_To_Entity(adminDTO);
         adminRepository.save(admin);
         return admin.getAno();
-    }
-
-    //facility
-    @Override
-    public FacilityDTO findByFno(Integer fno) {
-        FacilityDTO facilityDTO;
-        Facility facility = facilityRepository.findByFno(fno);
-        facilityDTO = BookingMapper.INSTANCE.facility_To_DTO(facility);
-        return facilityDTO;
-    }
-
-    @Override
-    public ManageDTO findByMno(Integer mno) {
-        ManageDTO manageDTO;
-        Manage manage = manageRepository.findByMno(mno);
-        manageDTO = BookingMapper.INSTANCE.manage_To_DTO(manage);
-        return manageDTO;
     }
 }
