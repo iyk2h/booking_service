@@ -71,7 +71,7 @@ public class AdminController {
     public ResponseEntity<?> updateAdmin(@PathVariable("ano") Integer ano, @RequestBody AdminDTO adminDTO) {
         AdminDTO beforeDTO = adminService.findByAno(ano);
         if(adminDTO != null){
-            Integer u_ano = adminDTO.getAno()!=null?adminDTO.getAno():beforeDTO.getAno();
+            Integer u_ano = adminDTO.getAno()!=null?ano:beforeDTO.getAno();
             String u_pw = adminDTO.getPw()!=null?adminDTO.getPw():beforeDTO.getPw();
             String u_phone = adminDTO.getPhone()!=null?adminDTO.getPhone():beforeDTO.getPhone();
             String u_name = adminDTO.getName()!=null?adminDTO.getName():beforeDTO.getName();
