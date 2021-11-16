@@ -1,15 +1,9 @@
 package com.example.booking_service_01.service.Impl;
 
 import com.example.booking_service_01.dto.AdminDTO;
-import com.example.booking_service_01.dto.FacilityDTO;
-import com.example.booking_service_01.dto.ManageDTO;
 import com.example.booking_service_01.entity.Admin;
-import com.example.booking_service_01.entity.Facility;
-import com.example.booking_service_01.entity.Manage;
 import com.example.booking_service_01.mapper.BookingMapper;
 import com.example.booking_service_01.repository.AdminRepository;
-import com.example.booking_service_01.repository.FacilityRepository;
-import com.example.booking_service_01.repository.ManageRepository;
 import com.example.booking_service_01.service.AdminService;
 
 import org.springframework.beans.factory.annotation.Autowired;
