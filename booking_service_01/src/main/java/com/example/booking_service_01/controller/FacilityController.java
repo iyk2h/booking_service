@@ -55,6 +55,7 @@ public class FacilityController {
         List<FacilityDTO> dtos = facilityService.findAll();
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
+    
     //Update   
     @PutMapping(path = "/{fno}/", produces = "application/json")
     public ResponseEntity<?> updateFacility(@PathVariable("fno") Integer fno, @RequestBody FacilityDTO facilityDTO) {
