@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +46,28 @@ public class StudentsController {
         else{
             return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
         }
+    }
+    //Update   
+    @PutMapping(path = "/{sid}/", produces = "application/json")
+    public ResponseEntity<?> updateStudent(@PathVariable("sid") Integer sid, @RequestBody StudentsDTO studentsDTO) {
+        StudentsDTO beforeDTO = studentsService.findBySid(sid);
+        if(studentsDTO != null){
+            Integer u_sid = studentsDTO.getSid()!=null?sid:beforeDTO.getSid();
+            String u_pw = studentsDTO.getPw()!=null?studentsDTO.getPw():beforeDTO.getPw();
+            String u_phone = studentsDTO.getPhone()!=null?studentsDTO.getPhone():beforeDTO.getPhone();
+            String u_name = studentsDTO.getName()!=null?studentsDTO.getName():beforeDTO.getName();
+
+            StudentsDTO updateDTO= StudentsDTO.builder()
+                .sid(u_sid)
+                .pw(u_pw)
+                .phone(u_phone)
+                .name(u_name)
+                .build();
+            
+            return new ResponseEntity<>(studentsService.findBySid(studentsService.update(updateDTO)), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>("Update fail", HttpStatus.NOT_ACCEPTABLE);
     }
     //Delete
     @DeleteMapping(path="/{sid}", produces = "application/json")
