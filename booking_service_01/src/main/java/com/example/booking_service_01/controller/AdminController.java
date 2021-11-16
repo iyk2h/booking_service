@@ -1,8 +1,11 @@
 package com.example.booking_service_01.controller;
 
 import com.example.booking_service_01.dto.AdminDTO;
+import com.example.booking_service_01.dto.JwtAdminDTO;
 import com.example.booking_service_01.repository.AdminRepository;
-import com.example.booking_service_01.service.BookingServiceService;
+import com.example.booking_service_01.service.AdminService;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,40 +23,55 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/admin")
 public class AdminController {
     @Autowired
-    BookingServiceService bookingServiceService;
+    AdminService adminService;
     @Autowired
     AdminRepository adminRepository;
     
     //Select by ano
     @GetMapping(path="/{ano}", produces = "application/json")
     public ResponseEntity<?> getAno(@PathVariable("ano") Integer ano) {
-        if(!bookingServiceService.checkAno(ano)) {
-            return new ResponseEntity<>("ano can not found", HttpStatus.OK);
+        if(!adminService.checkAno(ano)) {
+            return new ResponseEntity<>("ano can not found", HttpStatus.NOT_ACCEPTABLE);
         }
         else {
-            AdminDTO adminDTO = bookingServiceService.findByAno(ano);
+            AdminDTO adminDTO = adminService.findByAno(ano);
             return new ResponseEntity<>(adminDTO, HttpStatus.OK);
         }
     }
 
     //Insert
-    @PostMapping(path = "", produces = "application/json")
+    @PostMapping(path = "/join", produces = "application/json")
     public ResponseEntity<?> insertAdmin(@RequestBody AdminDTO adminDTO) {
         if(adminDTO.getAno()!=null) {
-            if (bookingServiceService.checkAno(adminDTO.getAno()))
+            if (adminService.checkAno(adminDTO.getAno()))
                 return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
-            return new ResponseEntity<>(bookingServiceService.findByAno(bookingServiceService.insertAdminDto(adminDTO)), HttpStatus.CREATED);
+            return new ResponseEntity<>(adminService.findByAno(adminService.insertAdminDto(adminDTO)), HttpStatus.CREATED);
         }
         else{
             return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
         }
     }
+
     //Login
+    @PostMapping(path = "/login", produces = "application/json")
+
+    public ResponseEntity<?> loginAdmin(@RequestBody JwtAdminDTO loginDTO) {
+        if(!adminService.checkAno(loginDTO.getAno())) {
+            return new ResponseEntity<>("ano can not found", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else
+            if(adminService.admin_login(loginDTO.getAno(), loginDTO.getPw()) == true){
+            return new ResponseEntity<>(HttpStatus.OK);
+            }
+            else {
+            return new ResponseEntity<>("login fail", HttpStatus.NOT_ACCEPTABLE);
+            }
+    }
 
     //Update   
     @PutMapping(path = "/{ano}/", produces = "application/json")
     public ResponseEntity<?> updateAdmin(@PathVariable("ano") Integer ano, @RequestBody AdminDTO adminDTO) {
-        AdminDTO beforeDTO = bookingServiceService.findByAno(ano);
+        AdminDTO beforeDTO = adminService.findByAno(ano);
         if(adminDTO != null){
             Integer u_ano = adminDTO.getAno()!=null?adminDTO.getAno():beforeDTO.getAno();
             String u_pw = adminDTO.getPw()!=null?adminDTO.getPw():beforeDTO.getPw();
@@ -69,7 +87,7 @@ public class AdminController {
                 .email(u_email)
                 .build();
             
-            return new ResponseEntity<>(bookingServiceService.findByAno(bookingServiceService.update(updateDTO)), HttpStatus.OK);
+            return new ResponseEntity<>(adminService.findByAno(adminService.update(updateDTO)), HttpStatus.OK);
         }
         else
             return new ResponseEntity<>("Update fail", HttpStatus.NOT_ACCEPTABLE);
@@ -78,11 +96,11 @@ public class AdminController {
     //Delete
     @DeleteMapping(path="/{ano}", produces = "application/json")
     public ResponseEntity<?> deleteAdmin(@PathVariable("ano") Integer ano) {
-        if(!bookingServiceService.checkAno(ano))
+        if(!adminService.checkAno(ano))
             return new ResponseEntity<>("Admin ID can not found", HttpStatus.NOT_ACCEPTABLE);
         else {
-            AdminDTO admindDto = bookingServiceService.findByAno(ano);
-            bookingServiceService.delete(admindDto);
+            AdminDTO admindDto = adminService.findByAno(ano);
+            adminService.delete(admindDto);
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
     }
