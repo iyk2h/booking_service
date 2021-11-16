@@ -25,18 +25,6 @@ public class AdminController {
     @Autowired
     AdminRepository adminRepository;
     
-    //Select by ano
-    @GetMapping(path="/{ano}", produces = "application/json")
-    public ResponseEntity<?> getAno(@PathVariable("ano") Integer ano) {
-        if(!adminService.checkAno(ano)) {
-            return new ResponseEntity<>("ano can not found", HttpStatus.NOT_ACCEPTABLE);
-        }
-        else {
-            AdminDTO adminDTO = adminService.findByAno(ano);
-            return new ResponseEntity<>(adminDTO, HttpStatus.OK);
-        }
-    }
-
     //Insert
     @PostMapping(path = "/join", produces = "application/json")
     public ResponseEntity<?> insertAdmin(@RequestBody AdminDTO adminDTO) {
@@ -50,20 +38,16 @@ public class AdminController {
         }
     }
 
-    //Login
-    @PostMapping(path = "/login", produces = "application/json")
-
-    public ResponseEntity<?> loginAdmin(@RequestBody JwtAdminDTO loginDTO) {
-        if(!adminService.checkAno(loginDTO.getAno())) {
+    //Select by ano
+    @GetMapping(path="/{ano}", produces = "application/json")
+    public ResponseEntity<?> getAno(@PathVariable("ano") Integer ano) {
+        if(!adminService.checkAno(ano)) {
             return new ResponseEntity<>("ano can not found", HttpStatus.NOT_ACCEPTABLE);
         }
-        else
-            if(adminService.admin_login(loginDTO.getAno(), loginDTO.getPw()) == true){
-            return new ResponseEntity<>(HttpStatus.OK);
-            }
-            else {
-            return new ResponseEntity<>("login fail", HttpStatus.NOT_ACCEPTABLE);
-            }
+        else {
+            AdminDTO adminDTO = adminService.findByAno(ano);
+            return new ResponseEntity<>(adminDTO, HttpStatus.OK);
+        }
     }
 
     //Update   
@@ -102,4 +86,20 @@ public class AdminController {
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
     }
+
+    //Login
+    @PostMapping(path = "/login", produces = "application/json")
+
+    public ResponseEntity<?> loginAdmin(@RequestBody JwtAdminDTO loginDTO) {
+        if(!adminService.checkAno(loginDTO.getAno())) {
+            return new ResponseEntity<>("ano can not found", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else
+            if(adminService.admin_login(loginDTO.getAno(), loginDTO.getPw()) == true){
+            return new ResponseEntity<>(HttpStatus.OK);
+            }
+            else {
+            return new ResponseEntity<>("login fail", HttpStatus.NOT_ACCEPTABLE);
+            }
+    }    
 }
