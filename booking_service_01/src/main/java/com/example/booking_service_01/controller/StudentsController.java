@@ -1,7 +1,7 @@
 package com.example.booking_service_01.controller;
 
+import com.example.booking_service_01.dto.JwtStudentsDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
-import com.example.booking_service_01.entity.Students;
 import com.example.booking_service_01.repository.StudentsRepository;
 import com.example.booking_service_01.service.StudentsService;
 
@@ -80,4 +80,20 @@ public class StudentsController {
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
     }
+
+    //Login
+    @PostMapping(path = "/login", produces = "application/json")
+
+    public ResponseEntity<?> loginAdmin(@RequestBody JwtStudentsDTO loginDTO) {
+        if(!studentsService.checkSid(loginDTO.getSid())) {
+            return new ResponseEntity<>("ano can not found", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else
+            if(studentsService.students_login(loginDTO.getSid(), loginDTO.getPw()) == true){
+            return new ResponseEntity<>(HttpStatus.OK);
+            }
+            else {
+            return new ResponseEntity<>("login fail", HttpStatus.NOT_ACCEPTABLE);
+            }
+    }    
 }
