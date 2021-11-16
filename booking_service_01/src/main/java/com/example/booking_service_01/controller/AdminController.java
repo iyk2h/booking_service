@@ -1,7 +1,6 @@
 package com.example.booking_service_01.controller;
 
 import com.example.booking_service_01.dto.AdminDTO;
-import com.example.booking_service_01.entity.Admin;
 import com.example.booking_service_01.repository.AdminRepository;
 import com.example.booking_service_01.service.BookingServiceService;
 
@@ -54,11 +53,23 @@ public class AdminController {
     //Update   
     @PutMapping(path = "/{ano}/", produces = "application/json")
     public ResponseEntity<?> updateAdmin(@PathVariable("ano") Integer ano, @RequestBody AdminDTO adminDTO) {
+        AdminDTO beforeDTO = bookingServiceService.findByAno(ano);
         if(adminDTO != null){
-            if(ano != adminDTO.getAno() && adminDTO.getAno()==null){
-                return new ResponseEntity<>("Update fail", HttpStatus.NOT_ACCEPTABLE); 
-            }
-            return new ResponseEntity<>(bookingServiceService.findByAno(bookingServiceService.update(ano, adminDTO)), HttpStatus.OK);
+            Integer u_ano = adminDTO.getAno()!=null?adminDTO.getAno():beforeDTO.getAno();
+            String u_pw = adminDTO.getPw()!=null?adminDTO.getPw():beforeDTO.getPw();
+            String u_phone = adminDTO.getPhone()!=null?adminDTO.getPhone():beforeDTO.getPhone();
+            String u_name = adminDTO.getName()!=null?adminDTO.getName():beforeDTO.getName();
+            String u_email = adminDTO.getEmail()!=null?adminDTO.getEmail():beforeDTO.getEmail();
+
+            AdminDTO updateDTO= AdminDTO.builder()
+                .ano(u_ano)
+                .pw(u_pw)
+                .phone(u_phone)
+                .name(u_name)
+                .email(u_email)
+                .build();
+            
+            return new ResponseEntity<>(bookingServiceService.findByAno(bookingServiceService.update(updateDTO)), HttpStatus.OK);
         }
         else
             return new ResponseEntity<>("Update fail", HttpStatus.NOT_ACCEPTABLE);

@@ -11,10 +11,8 @@ import com.example.booking_service_01.entity.Facility;
 import com.example.booking_service_01.entity.Manage;
 import com.example.booking_service_01.entity.Students;
 
-import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

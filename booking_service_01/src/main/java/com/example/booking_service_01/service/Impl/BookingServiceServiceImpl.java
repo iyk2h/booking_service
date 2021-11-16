@@ -12,7 +12,6 @@ import com.example.booking_service_01.repository.FacilityRepository;
 import com.example.booking_service_01.repository.ManageRepository;
 import com.example.booking_service_01.service.BookingServiceService;
 
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,20 +55,9 @@ public class BookingServiceServiceImpl implements BookingServiceService{
     }
 
     @Override
-    public Integer update(Integer ano, AdminDTO adminDTO) {
-        System.out.println("update"); 
-        System.out.println(adminDTO.getPw());
-        
+    public Integer update(AdminDTO adminDTO) {
         Admin admin = BookingMapper.INSTANCE.adminDto_To_Entity(adminDTO);
-
-        System.out.println("dto to entity"); 
-        System.out.println(admin.getPw());
-        System.out.println(adminDTO.getPw());
-
         adminRepository.save(admin);
-        System.out.println("updated"); 
-        System.out.println(adminDTO);
-        System.out.println(adminDTO.getPw());
         return admin.getAno();
     }
 
