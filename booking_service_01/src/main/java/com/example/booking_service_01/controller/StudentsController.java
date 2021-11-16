@@ -24,17 +24,7 @@ public class StudentsController {
     StudentsService studentsService;
     @Autowired
     StudentsRepository studentsRepository;
-    //Select 
-    @GetMapping(path="/{sid}", produces = "application/json")
-    public ResponseEntity<?> getSid(@PathVariable("sid") Integer sid) {
-        if(!studentsService.checkSid(sid)) {
-            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_ACCEPTABLE);
-        }
-        else {
-            StudentsDTO studentsDTO = studentsService.findBySid(sid);
-            return new ResponseEntity<>(studentsDTO, HttpStatus.OK);
-        }
-    }
+    
     //Insert
     @PostMapping(path = "/join", produces = "application/json")
     public ResponseEntity<?> insertStudent(@RequestBody StudentsDTO studentsDTO) {
@@ -47,6 +37,19 @@ public class StudentsController {
             return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
         }
     }
+
+    //Select 
+    @GetMapping(path="/{sid}", produces = "application/json")
+    public ResponseEntity<?> getSid(@PathVariable("sid") Integer sid) {
+        if(!studentsService.checkSid(sid)) {
+            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else {
+            StudentsDTO studentsDTO = studentsService.findBySid(sid);
+            return new ResponseEntity<>(studentsDTO, HttpStatus.OK);
+        }
+    }
+
     //Update   
     @PutMapping(path = "/{sid}/", produces = "application/json")
     public ResponseEntity<?> updateStudent(@PathVariable("sid") Integer sid, @RequestBody StudentsDTO studentsDTO) {
@@ -69,6 +72,7 @@ public class StudentsController {
         else
             return new ResponseEntity<>("Update fail", HttpStatus.NOT_ACCEPTABLE);
     }
+    
     //Delete
     @DeleteMapping(path="/{sid}", produces = "application/json")
     public ResponseEntity<?> deleteStudent(@PathVariable("sid") Integer sid) {
