@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AdminRepository extends JpaRepository<Admin,String>{
+public interface AdminRepository extends JpaRepository<Admin, Integer>{
     Admin findByAno(Integer ano);
 
     // @Modifying
