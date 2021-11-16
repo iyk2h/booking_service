@@ -4,8 +4,6 @@ import com.example.booking_service_01.dto.AdminDTO;
 import com.example.booking_service_01.dto.JwtAdminDTO;
 import com.example.booking_service_01.repository.AdminRepository;
 import com.example.booking_service_01.service.AdminService;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
