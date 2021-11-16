@@ -1,5 +1,7 @@
 package com.example.booking_service_01.mapper;
 
+import java.util.List;
+
 import com.example.booking_service_01.dto.AdminDTO;
 import com.example.booking_service_01.dto.BookingDTO;
 import com.example.booking_service_01.dto.FacilityDTO;
@@ -15,6 +17,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+
 @Mapper
 public interface BookingMapper {
     BookingMapper INSTANCE = Mappers.getMapper(BookingMapper.class);
@@ -29,6 +32,7 @@ public interface BookingMapper {
     Booking bookingDto_To_Entity(BookingDTO bookigdDto); 
 
     FacilityDTO facility_To_DTO(Facility facility);
+    List<FacilityDTO> facility_To_List_DTO(List<Facility> facilities);
     Facility facilityDTO_To_Entity(FacilityDTO facilityDTO);
 
     @Mapping(target = "ano", source = "admin.ano")
