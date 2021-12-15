@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FacilityRepository extends JpaRepository<Facility, Integer>{
     Facility findByFno(Integer fno);
+
 }
