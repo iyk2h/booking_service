@@ -38,10 +38,10 @@ public class Booking {
     @JoinColumn(name = "sid")
     private Students students;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Date start_time;
  
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Date end_time;
 
     @Column(nullable = false)
