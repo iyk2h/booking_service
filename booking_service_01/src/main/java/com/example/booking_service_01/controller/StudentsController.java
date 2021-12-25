@@ -2,7 +2,6 @@ package com.example.booking_service_01.controller;
 
 import com.example.booking_service_01.dto.JwtStudentsDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
-import com.example.booking_service_01.repository.StudentsRepository;
 import com.example.booking_service_01.service.StudentsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudentsController {
     @Autowired
     StudentsService studentsService;
-    @Autowired
-    StudentsRepository studentsRepository;
+    // @Autowired
+    // StudentsRepository studentsRepository;
     
     //Insert
     @PostMapping(path = "/join", produces = "application/json")

@@ -2,7 +2,6 @@ package com.example.booking_service_01.controller;
 
 import com.example.booking_service_01.dto.AdminDTO;
 import com.example.booking_service_01.dto.JwtAdminDTO;
-import com.example.booking_service_01.repository.AdminRepository;
 import com.example.booking_service_01.service.AdminService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
     @Autowired
     AdminService adminService;
-    @Autowired
-    AdminRepository adminRepository;
+    // @Autowired
+    // AdminRepository adminRepository;
     
     //Insert
     @PostMapping(path = "/join", produces = "application/json")

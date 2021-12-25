@@ -29,7 +29,7 @@ class BookingService01ApplicationTests {
     public void eToD(){
 		/*given */
 		final Admin admin= Admin.builder()
-			.ano(1)
+			.ano(100)
 			.pw("pw")
 			.name("name")
 			.phone("phone")
@@ -38,7 +38,7 @@ class BookingService01ApplicationTests {
 		/*when */
         final AdminDTO adminDto = BookingMapper.INSTANCE.admin_To_DTO(admin);
 		/*then */
-        assertEquals(1, adminDto.getAno());
+        assertEquals(100, adminDto.getAno());
         assertEquals("pw", adminDto.getPw());
         assertEquals("name", adminDto.getName());
         assertEquals("phone", adminDto.getPhone());
