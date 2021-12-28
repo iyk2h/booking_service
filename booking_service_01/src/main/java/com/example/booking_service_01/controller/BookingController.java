@@ -1,6 +1,11 @@
 package com.example.booking_service_01.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.example.booking_service_01.dto.BookingDTO;
 import com.example.booking_service_01.dto.FacilityDTO;
@@ -32,15 +37,40 @@ public class BookingController {
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-    @PostMapping(path="/{fno}", produces = "application/json")
-    public ResponseEntity<?> insetBooking(@PathVariable Integer fno ,@RequestBody BookingDTO bookingDTO) {
-        if(bookingDTO!=null && bookingDTO.getBno()==null) {
-            // if (adminService.checkAno(adminDTO.getAno()))
-                // return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
-            return new ResponseEntity<>(bookingService.findByBno(bookingService.insertBookingDto(bookingDTO)), HttpStatus.CREATED);
+    //Select by fno
+    @GetMapping(path="/{fno}", produces = "application/json")
+    public ResponseEntity<?> getFnoToBooking(@PathVariable("fno") Integer fno) {
+        if(!facilityService.checkFno(fno)) {
+            return new ResponseEntity<>("fno can not found", HttpStatus.NOT_ACCEPTABLE);
         }
-        else{
-            return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+        else {
+            // FacilityDTO facilityDTO = facilityService.findByFno(fno);
+            List<BookingDTO> bookingDTOs = bookingService.findByFno(fno);
+            return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
+        }
+    }
+
+    //Booking facility, student
+    @PostMapping(path="/{fno}", produces = "application/json")
+    public ResponseEntity<?> bookingFacilityStudent(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO,HttpServletRequest request) throws URISyntaxException {
+        HttpSession session = request.getSession();
+        Integer sid = (Integer) session.getAttribute("id");
+        org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
+        if(sid == null) {
+            URI redirectUrl = new URI("/students/login");
+            httpHeaders.setLocation(redirectUrl);
+            return new ResponseEntity<>("로그인 후 이용해 주세요.", httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+        }
+
+        if(!facilityService.checkFno(fno)) {
+            URI redirectUrl = new URI("/booking");
+            httpHeaders.setLocation(redirectUrl);
+            return new ResponseEntity<>("fno can not found", httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+        }
+        else {
+            URI redirectUrl = new URI("/students/mybooking");
+            httpHeaders.setLocation(redirectUrl);
+            return new ResponseEntity<>(bookingService.insertBookingDto(bookingDTO), httpHeaders, HttpStatus.MOVED_PERMANENTLY);
         }
     }
 }
