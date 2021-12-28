@@ -1,5 +1,11 @@
 package com.example.booking_service_01.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.example.booking_service_01.dto.JwtStudentsDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.service.StudentsService;
@@ -87,16 +93,35 @@ public class StudentsController {
     //Login
     @PostMapping(path = "/login", produces = "application/json")
 
-    public ResponseEntity<?> loginAdmin(@RequestBody JwtStudentsDTO loginDTO) {
+    public ResponseEntity<?> loginAdmin(@RequestBody JwtStudentsDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
         if(!studentsService.checkSid(loginDTO.getSid())) {
             return new ResponseEntity<>("ano can not found", HttpStatus.NOT_ACCEPTABLE);
         }
         else
             if(studentsService.students_login(loginDTO.getSid(), loginDTO.getPw()) == true){
-            return new ResponseEntity<>(HttpStatus.OK);
+                HttpSession session = request.getSession();
+                session.setAttribute("id", loginDTO.getSid());
+                session.setAttribute("role", "student");
+
+                URI redirectUrl = new URI("/");
+                org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
+                httpHeaders.setLocation(redirectUrl);
+            return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);
             }
             else {
             return new ResponseEntity<>("login fail", HttpStatus.NOT_ACCEPTABLE);
             }
-    }    
+    } 
+    //logout
+    @PostMapping(path = "/logout", produces = "application/json")
+    public ResponseEntity<?> logoutStudent(HttpServletRequest request) throws URISyntaxException {
+        HttpSession session = request.getSession();
+        if(session != null){
+            session.invalidate();
+        }
+        URI redirectUrl = new URI("/booking");
+        org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
+        httpHeaders.setLocation(redirectUrl);
+        return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);
+    }
 }
