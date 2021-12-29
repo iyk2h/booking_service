@@ -30,6 +30,7 @@ public interface BookingMapper {
     @Mapping(target = "students.sid", source = "sid")
     @Mapping(target = "facility.fno", source = "fno")
     Booking bookingDto_To_Entity(BookingDTO bookigdDto); 
+    List<BookingDTO> booking_To_List_DTO(List<Booking> bookings);
 
     FacilityDTO facility_To_DTO(Facility facility);
     List<FacilityDTO> facility_To_List_DTO(List<Facility> facilities);
