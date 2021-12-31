@@ -61,4 +61,5 @@ public class AdminServiceImpl implements AdminService{
         adminRepository.save(admin);
         return admin.getAno();
     }
+
 }
