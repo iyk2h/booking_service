@@ -1,9 +1,11 @@
 package com.example.booking_service_01.controller;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.example.booking_service_01.dto.JwtStudentsDTO;
@@ -109,11 +111,11 @@ public class StudentsController {
             return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);
             }
             else {
-            return new ResponseEntity<>("login fail", HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>("login fail", HttpStatus.NOT_ACCEPTABLE);
             }
     } 
     //logout
-    @PostMapping(path = "/logout", produces = "application/json")
+    @GetMapping(path = "/logout", produces = "application/json")
     public ResponseEntity<?> logoutStudent(HttpServletRequest request) throws URISyntaxException {
         HttpSession session = request.getSession();
         if(session != null){
@@ -123,5 +125,28 @@ public class StudentsController {
         org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
         httpHeaders.setLocation(redirectUrl);
         return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);
+    }
+    
+    @GetMapping("/test")
+    public ResponseEntity<?> test(HttpServletResponse response) throws URISyntaxException{
+    	URI redirect_uri=new URI("http://www.google.com");
+        org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
+        return (ResponseEntity<?>) ResponseEntity.ok().location(redirect_uri);
+    }
+    
+    @GetMapping("/test2")
+    public ResponseEntity<?> test2(HttpServletResponse response) throws URISyntaxException, IOException{
+    	URI redirect_uri=new URI("http://www.google.com");
+        org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
+        httpHeaders.setLocation(redirect_uri);
+        String redirecturi="http://www.google.com";
+        response.sendRedirect(redirecturi);
+        return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);    
+    }
+    
+    @GetMapping("/google")
+    public void oauthLogin(HttpServletResponse response) throws IOException{
+    	String redirect_uri="http://www.google.com";
+    	response.sendRedirect(redirect_uri);
     }
 }
