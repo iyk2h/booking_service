@@ -11,7 +11,6 @@ import com.example.booking_service_01.mapper.BookingMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.extern.slf4j.Slf4j;
@@ -83,5 +82,6 @@ class BookingService01ApplicationTests {
 		System.out.println(manage.getAdmin().getAno());
         System.out.println("DTO To Entity all pass");
 	}
+
 }
 

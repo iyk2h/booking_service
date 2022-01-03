@@ -1,6 +1,6 @@
 package com.example.booking_service_01.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,12 +38,12 @@ public class Booking {
     @JoinColumn(name = "sid")
     private Students students;
 
-    @Column(nullable = true)
-    private Date start_time;
+    @Column(name="start_time", nullable = false)
+    private LocalDateTime startTime;
  
-    @Column(nullable = true)
-    private Date end_time;
-
+    @Column(name="end_time", nullable = false)
+    private LocalDateTime endTime;
+    
     @Column(nullable = false)
     private Integer headcount;
 }

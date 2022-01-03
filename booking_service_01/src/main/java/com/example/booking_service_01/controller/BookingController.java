@@ -2,6 +2,8 @@ package com.example.booking_service_01.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(path="/booking")
@@ -73,4 +77,15 @@ public class BookingController {
             return new ResponseEntity<>(bookingService.insertBookingDto(bookingDTO), httpHeaders, HttpStatus.MOVED_PERMANENTLY);
         }
     }
+
+    @PostMapping(path="/{fno}/date", produces = "application/json")
+    public ResponseEntity<?> bookingByDate(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO) {
+        LocalDate date =bookingDTO.getDate();
+        
+        List<BookingDTO> bookingDTOs = bookingService.findBookingListByDate(date);
+        
+        return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
+    }
+
+    
 }

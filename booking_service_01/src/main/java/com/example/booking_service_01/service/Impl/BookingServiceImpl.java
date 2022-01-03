@@ -1,5 +1,8 @@
 package com.example.booking_service_01.service.Impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +44,17 @@ public class BookingServiceImpl implements BookingService {
         List<BookingDTO> dtos = new ArrayList<>();
         List<Booking> entitys = bookingRepository.findByFacility(facility);
         dtos = BookingMapper.INSTANCE.booking_To_List_DTO(entitys);
+        return dtos;
+    }
+
+    @Override
+    public List<BookingDTO> findBookingListByDate(LocalDate date) {
+        LocalDateTime start = LocalDateTime.of(date, LocalTime.of(0, 0));
+        LocalDateTime end = start.plusDays(1);
+        List<Booking> entitys = bookingRepository.findAllByStartTimeBetween(start, end);
+        
+        List<BookingDTO> dtos = BookingMapper.INSTANCE.booking_To_List_DTO(entitys);
+        
         return dtos;
     }
 }

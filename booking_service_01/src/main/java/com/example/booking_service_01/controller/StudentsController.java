@@ -131,7 +131,8 @@ public class StudentsController {
     public ResponseEntity<?> test(HttpServletResponse response) throws URISyntaxException{
     	URI redirect_uri=new URI("http://www.google.com");
         org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
-        return (ResponseEntity<?>) ResponseEntity.ok().location(redirect_uri);
+        httpHeaders.setLocation(redirect_uri);
+        return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);    
     }
     
     @GetMapping("/test2")

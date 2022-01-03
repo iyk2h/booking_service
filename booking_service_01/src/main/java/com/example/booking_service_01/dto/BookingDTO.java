@@ -1,6 +1,11 @@
 package com.example.booking_service_01.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +20,11 @@ public class BookingDTO {
     private Integer bno;
     private Integer fno;
     private String sid;
-    private Date start_time;
-    private Date end_time;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    private LocalDateTime startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    private LocalDateTime endTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
     private Integer headcount; 
 }

@@ -1,5 +1,6 @@
 package com.example.booking_service_01.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.booking_service_01.entity.Booking;
@@ -15,4 +16,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
     Booking findByBno(Integer bno);
     
     List<Booking> findByFacility(Facility facility);
+
+    //booking list from Date
+    List<Booking> findAllByStartTimeBetween(LocalDateTime startTime, LocalDateTime endTime);
 }
