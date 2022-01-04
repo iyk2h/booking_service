@@ -81,11 +81,10 @@ public class BookingController {
     @PostMapping(path="/{fno}/date", produces = "application/json")
     public ResponseEntity<?> bookingByDate(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO) {
         LocalDate date =bookingDTO.getDate();
-        
-        List<BookingDTO> bookingDTOs = bookingService.findBookingListByDate(date);
+        List<BookingDTO> bookingDTOs = bookingService.findBookingListByFacilityWhitDate(fno, date);
         
         return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
     }
-
     
+
 }

@@ -57,4 +57,16 @@ public class BookingServiceImpl implements BookingService {
         
         return dtos;
     }
+
+    @Override
+    public List<BookingDTO> findBookingListByFacilityWhitDate(Integer fno, LocalDate date) {
+        LocalDateTime start = LocalDateTime.of(date, LocalTime.of(0, 0));
+        LocalDateTime end = start.plusDays(1);
+        Facility facility = facilityRepository.findByFno(fno);
+        List<Booking> entitys  = bookingRepository.findAllByFacility(facility, start, end);
+
+        List<BookingDTO> dtos = BookingMapper.INSTANCE.booking_To_List_DTO(entitys);
+        
+        return dtos;
+    }
 }

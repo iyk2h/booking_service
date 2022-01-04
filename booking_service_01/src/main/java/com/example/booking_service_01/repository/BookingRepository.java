@@ -7,6 +7,7 @@ import com.example.booking_service_01.entity.Booking;
 import com.example.booking_service_01.entity.Facility;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -19,4 +20,9 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
 
     //booking list from Date
     List<Booking> findAllByStartTimeBetween(LocalDateTime startTime, LocalDateTime endTime);
+
+    //booking list from Date with fno
+    @Query(value = "select b from Booking AS b where b.facility= ?1 and b.startTime between ?2 and ?3")
+    List<Booking> findAllByFacility(Facility facility, LocalDateTime startTime, LocalDateTime endTime);
+    
 }
