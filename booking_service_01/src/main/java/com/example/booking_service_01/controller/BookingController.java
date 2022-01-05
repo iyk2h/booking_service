@@ -3,6 +3,8 @@ package com.example.booking_service_01.controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -60,6 +62,7 @@ public class BookingController {
         HttpSession session = request.getSession();
         Integer sid = (Integer) session.getAttribute("id");
         org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
+
         if(sid == null) {
             URI redirectUrl = new URI("/students/login");
             httpHeaders.setLocation(redirectUrl);
@@ -74,7 +77,20 @@ public class BookingController {
         else {
             URI redirectUrl = new URI("/students/mybooking");
             httpHeaders.setLocation(redirectUrl);
-            return new ResponseEntity<>(bookingService.insertBookingDto(bookingDTO), httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+            
+            LocalDateTime start = LocalDateTime.of(bookingDTO.getDate(), LocalTime.of(bookingDTO.getBtnradio(), 0));
+            LocalDateTime end  = start.plusHours(1);
+
+            BookingDTO newBookingDTO = BookingDTO.builder()
+                .bno(bookingDTO.getBno())
+                .sid(sid)
+                .fno(fno)
+                .startTime(start)
+                .endTime(end)
+                .headcount(bookingDTO.getHeadcount())
+                .build();
+
+            return new ResponseEntity<>(bookingService.insertBookingDto(newBookingDTO), httpHeaders, HttpStatus.CREATED);
         }
     }
 
