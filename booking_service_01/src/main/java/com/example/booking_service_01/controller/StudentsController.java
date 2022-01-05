@@ -97,7 +97,7 @@ public class StudentsController {
 
     public ResponseEntity<?> loginAdmin(@RequestBody JwtStudentsDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
         if(!studentsService.checkSid(loginDTO.getSid())) {
-            return new ResponseEntity<>("ano can not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_ACCEPTABLE);
         }
         else
             if(studentsService.students_login(loginDTO.getSid(), loginDTO.getPw()) == true){
