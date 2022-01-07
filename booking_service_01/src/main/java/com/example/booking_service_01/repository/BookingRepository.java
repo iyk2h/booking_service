@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.booking_service_01.entity.Booking;
 import com.example.booking_service_01.entity.Facility;
+import com.example.booking_service_01.entity.Students;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,8 +16,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
 //    List<Booking> findByBnoList(Integer bno);
     
     Booking findByBno(Integer bno);
-    
     List<Booking> findByFacility(Facility facility);
+    List<Booking> findByStudents(Students students);
 
     //booking list from Date
     List<Booking> findAllByStartTimeBetween(LocalDateTime startTime, LocalDateTime endTime);

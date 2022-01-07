@@ -1,8 +1,12 @@
 package com.example.booking_service_01.service.Impl;
 
+import java.util.List;
+
 import com.example.booking_service_01.dto.StudentsDTO;
+import com.example.booking_service_01.entity.Booking;
 import com.example.booking_service_01.entity.Students;
 import com.example.booking_service_01.mapper.BookingMapper;
+import com.example.booking_service_01.repository.BookingRepository;
 import com.example.booking_service_01.repository.StudentsRepository;
 import com.example.booking_service_01.service.StudentsService;
 
@@ -13,6 +17,9 @@ import org.springframework.stereotype.Service;
 public class StudentsServiceImpl implements StudentsService{
     @Autowired
     StudentsRepository studentsRepository;
+    @Autowired
+    BookingRepository bookingRepository;
+
 
     @Override
     public StudentsDTO findBySid(Integer sid) {
@@ -40,6 +47,8 @@ public class StudentsServiceImpl implements StudentsService{
     @Override
     public void delete(StudentsDTO studentsDTO) {
         Students students = BookingMapper.INSTANCE.studentsDTO_To_Entity(studentsDTO);
+        List<Booking> bookings = bookingRepository.findByStudents(students);
+        bookingRepository.deleteAll(bookings);
         studentsRepository.delete(students);
     }
 
