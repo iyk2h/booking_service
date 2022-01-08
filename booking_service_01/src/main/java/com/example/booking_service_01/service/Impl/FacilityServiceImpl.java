@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.booking_service_01.dto.FacilityDTO;
+import com.example.booking_service_01.entity.Booking;
 import com.example.booking_service_01.entity.Facility;
 import com.example.booking_service_01.mapper.BookingMapper;
+import com.example.booking_service_01.repository.BookingRepository;
 import com.example.booking_service_01.repository.FacilityRepository;
 import com.example.booking_service_01.service.FacilityService;
 
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 public class FacilityServiceImpl implements FacilityService{
     @Autowired
     private FacilityRepository facilityRepository;    
+    @Autowired
+    BookingRepository bookingRepository;
     
     //findByFno
     @Override
@@ -53,6 +57,8 @@ public class FacilityServiceImpl implements FacilityService{
     @Override
     public void delete(FacilityDTO facilityDTO) {
         Facility facility = BookingMapper.INSTANCE.facilityDTO_To_Entity(facilityDTO);
+        List<Booking> bookings = bookingRepository.findByFacility(facility);
+        bookingRepository.deleteAll(bookings);
         facilityRepository.delete(facility);
     }
 
