@@ -32,10 +32,17 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Integer insertBookingDto(BookingDTO bookingDTO) {
-        Booking booking = BookingMapper.INSTANCE.bookingDto_To_Entity(bookingDTO);
-        bookingRepository.save(booking);
-        return booking.getBno();
+    public BookingDTO insertBookingDto(BookingDTO bookingDTO) {
+        Booking result = BookingMapper.INSTANCE.bookingDto_To_Entity(bookingDTO);
+        BookingDTO resultDto;
+        try {
+            result = bookingRepository.save(result);
+            resultDto = BookingMapper.INSTANCE.booking_To_DTO(result);
+        }
+        catch (Exception e) {
+            resultDto = null;
+        }
+        return resultDto;
     }
 
     @Override
@@ -68,5 +75,19 @@ public class BookingServiceImpl implements BookingService {
         List<BookingDTO> dtos = BookingMapper.INSTANCE.booking_To_List_DTO(entitys);
         
         return dtos;
+    }
+
+    @Override
+    public boolean checkBookingTime(Integer fno, LocalDateTime start, LocalDateTime end) {
+        Facility facility = facilityRepository.findByFno(fno);
+        if (bookingRepository.findAllByFacility(facility, start, end).size() == 0)
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public void deleteBooking (Integer bno) {
+        bookingRepository.deleteById(bno);
     }
 }

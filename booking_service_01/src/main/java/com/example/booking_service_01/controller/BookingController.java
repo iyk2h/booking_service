@@ -18,8 +18,10 @@ import com.example.booking_service_01.service.FacilityService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,39 +60,34 @@ public class BookingController {
 
     //Booking facility, student
     @PostMapping(path="/{fno}", produces = "application/json")
-    public ResponseEntity<?> bookingFacilityStudent(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO,HttpServletRequest request) throws URISyntaxException {
+    public ResponseEntity<?> bookingFacilityStudent(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO,HttpServletRequest request)  {
         HttpSession session = request.getSession();
         Integer sid = (Integer) session.getAttribute("id");
-        org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
 
         if(sid == null) {
-            URI redirectUrl = new URI("/students/login");
-            httpHeaders.setLocation(redirectUrl);
-            return new ResponseEntity<>("로그인 후 이용해 주세요.", httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+            return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.MOVED_PERMANENTLY);
         }
-
         if(!facilityService.checkFno(fno)) {
-            URI redirectUrl = new URI("/booking");
-            httpHeaders.setLocation(redirectUrl);
-            return new ResponseEntity<>("fno can not found", httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+            return new ResponseEntity<>("fno can not found", HttpStatus.MOVED_PERMANENTLY);
         }
         else {
-            URI redirectUrl = new URI("/students/mybooking");
-            httpHeaders.setLocation(redirectUrl);
-            
             LocalDateTime start = LocalDateTime.of(bookingDTO.getDate(), LocalTime.of(bookingDTO.getBtnradio(), 0));
             LocalDateTime end  = start.plusHours(1);
+            if(bookingService.checkBookingTime(fno, start, end)) {
+                BookingDTO newBookingDTO = BookingDTO.builder()
+                    .bno(bookingDTO.getBno())
+                    .sid(sid)
+                    .fno(fno)
+                    .startTime(start)
+                    .endTime(end)
+                    .headcount(bookingDTO.getHeadcount())
+                    .build();
 
-            BookingDTO newBookingDTO = BookingDTO.builder()
-                .bno(bookingDTO.getBno())
-                .sid(sid)
-                .fno(fno)
-                .startTime(start)
-                .endTime(end)
-                .headcount(bookingDTO.getHeadcount())
-                .build();
-
-            return new ResponseEntity<>(bookingService.insertBookingDto(newBookingDTO), httpHeaders, HttpStatus.CREATED);
+                BookingDTO saveDto = bookingService.insertBookingDto(newBookingDTO);
+            return new ResponseEntity<>(saveDto, HttpStatus.CREATED);
+            }
+            else
+               return new ResponseEntity<>("예약 시간을 확인하세요.", HttpStatus.BAD_REQUEST);  
         }
     }
 
@@ -102,5 +99,4 @@ public class BookingController {
         return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
     }
     
-
 }
