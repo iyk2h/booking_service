@@ -99,4 +99,20 @@ public class BookingController {
         return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
     }
     
+    @DeleteMapping(path="/{bno}", produces = "application/json")
+    public ResponseEntity<?> deleteBookingByBno(@PathVariable("bno") Integer bno, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Integer sid = (Integer) session.getAttribute("id");
+
+        if(sid == null) {
+            return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.MOVED_PERMANENTLY);
+        } 
+        if (bookingService.findByBno(bno)==null){
+            return new ResponseEntity<>("fno can not found", HttpStatus.NOT_ACCEPTABLE); 
+        }
+        else {
+            bookingService.deleteBooking(bno);
+            return new ResponseEntity<>("삭제되었습니다.",HttpStatus.OK);
+        }
+    }
 }
