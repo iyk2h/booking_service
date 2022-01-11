@@ -27,6 +27,5 @@ public class BookingDTO {
     private LocalDateTime endTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-    private Integer headcount;
     private Integer btnradio;
 }

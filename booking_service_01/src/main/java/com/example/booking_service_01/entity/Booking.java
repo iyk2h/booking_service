@@ -44,6 +44,4 @@ public class Booking {
     @Column(name="end_time", nullable = false)
     private LocalDateTime endTime;
 
-    @Column(nullable = false)
-    private Integer headcount;
 }
