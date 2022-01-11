@@ -80,7 +80,6 @@ public class BookingController {
                     .fno(fno)
                     .startTime(start)
                     .endTime(end)
-                    .headcount(bookingDTO.getHeadcount())
                     .build();
 
                 BookingDTO saveDto = bookingService.insertBookingDto(newBookingDTO);
