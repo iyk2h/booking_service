@@ -97,23 +97,25 @@ public class StudentsController {
 
     public ResponseEntity<?> loginAdmin(@RequestBody JwtStudentsDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
         if(!studentsService.checkSid(loginDTO.getSid())) {
-            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("sid can not found", HttpStatus.UNAUTHORIZED);
         }
-        else
+        else {
             if(studentsService.students_login(loginDTO.getSid(), loginDTO.getPw()) == true){
                 HttpSession session = request.getSession();
                 session.setAttribute("id", loginDTO.getSid());
                 session.setAttribute("role", "student");
 
-                URI redirectUrl = new URI("/");
-                org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
-                httpHeaders.setLocation(redirectUrl);
-            return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);
+                // URI redirectUrl = new URI("/booking");
+                // org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
+                // httpHeaders.setLocation(redirectUrl);
+            return new ResponseEntity<>("성공", HttpStatus.OK);
             }
             else {
                 return new ResponseEntity<>("login fail", HttpStatus.NOT_ACCEPTABLE);
             }
+        }
     } 
+
     //logout
     @GetMapping(path = "/logout", produces = "application/json")
     public ResponseEntity<?> logoutStudent(HttpServletRequest request) throws URISyntaxException {
