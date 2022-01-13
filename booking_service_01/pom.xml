@@ -49,6 +49,12 @@
 			<version>2.4.5</version>
 		 </dependency> -->
 		
+		 <!-- session -->
+		 <dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-core</artifactId>
+		</dependency>
+
 		<!-- mapstruct -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
