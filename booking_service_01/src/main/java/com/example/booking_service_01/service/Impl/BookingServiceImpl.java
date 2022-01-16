@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.booking_service_01.dto.BookingDTO;
+import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.entity.Booking;
 import com.example.booking_service_01.entity.Facility;
+import com.example.booking_service_01.entity.Students;
 import com.example.booking_service_01.mapper.BookingMapper;
 import com.example.booking_service_01.repository.BookingRepository;
 import com.example.booking_service_01.repository.FacilityRepository;
+import com.example.booking_service_01.repository.StudentsRepository;
 import com.example.booking_service_01.service.BookingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,8 @@ public class BookingServiceImpl implements BookingService {
     BookingRepository bookingRepository;
     @Autowired
     FacilityRepository facilityRepository;
+    @Autowired
+    StudentsRepository studentsRepository;
 
     @Override
     public BookingDTO findByBno(Integer bno) {
@@ -55,6 +60,15 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public List<BookingDTO> findBySid(Integer sid) {
+        Students students = studentsRepository.findBySid(sid);
+        List<BookingDTO> dtos = new ArrayList<>();
+        List<Booking> entitys = bookingRepository.findByStudents(students);
+        dtos = BookingMapper.INSTANCE.booking_To_List_DTO(entitys);
+        return dtos;
+    }
+
+    @Override
     public List<BookingDTO> findBookingListByDate(LocalDate date) {
         LocalDateTime start = LocalDateTime.of(date, LocalTime.of(0, 0));
         LocalDateTime end = start.plusDays(1);
@@ -63,6 +77,16 @@ public class BookingServiceImpl implements BookingService {
         List<BookingDTO> dtos = BookingMapper.INSTANCE.booking_To_List_DTO(entitys);
         
         return dtos;
+    }
+
+    @Override
+    public boolean checkByBnoSid(Integer sid, Integer bno) {
+        Students students = studentsRepository.findBySid(sid);
+        if(bookingRepository.findBySidBno(students, bno).size()==0){
+            return false;
+        }
+        else
+            return true;
     }
 
     @Override
@@ -80,6 +104,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public boolean checkBookingTime(Integer fno, LocalDateTime start, LocalDateTime end) {
         Facility facility = facilityRepository.findByFno(fno);
+        end.plusSeconds(1);
         if (bookingRepository.findAllByFacility(facility, start, end).size() == 0)
             return true;
         else

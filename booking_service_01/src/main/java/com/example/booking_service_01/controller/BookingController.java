@@ -13,8 +13,11 @@ import javax.servlet.http.HttpSession;
 
 import com.example.booking_service_01.dto.BookingDTO;
 import com.example.booking_service_01.dto.FacilityDTO;
+import com.example.booking_service_01.dto.StudentsDTO;
+import com.example.booking_service_01.entity.Students;
 import com.example.booking_service_01.service.BookingService;
 import com.example.booking_service_01.service.FacilityService;
+import com.example.booking_service_01.service.StudentsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +40,8 @@ public class BookingController {
     FacilityService facilityService;
     @Autowired
     BookingService bookingService;
+    @Autowired
+    StudentsService studentsService;
 
     //facility list
     @GetMapping(path="", produces = "application/json")
@@ -61,18 +66,25 @@ public class BookingController {
     //Booking facility, student
     @PostMapping(path="/{fno}", produces = "application/json")
     public ResponseEntity<?> bookingFacilityStudent(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO,HttpServletRequest request)  {
+        System.out.println("fno="+fno);
+        System.out.println("date="+bookingDTO.getDate());
+        System.out.println("btn="+bookingDTO.getBtnradio());
+        
         HttpSession session = request.getSession();
         Integer sid = (Integer) session.getAttribute("id");
-
+        System.out.println("sid="+sid);
         if(sid == null) {
-            return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.MOVED_PERMANENTLY);
+            return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.NOT_ACCEPTABLE);
         }
         if(!facilityService.checkFno(fno)) {
-            return new ResponseEntity<>("fno can not found", HttpStatus.MOVED_PERMANENTLY);
+            return new ResponseEntity<>("시설을 확인해 주세요.", HttpStatus.NOT_ACCEPTABLE);
         }
         else {
+            if(bookingDTO.getBtnradio() >=24 || bookingDTO.getBtnradio() <0) {
+                return new ResponseEntity<>("예약 시간을 확인해 주세요.", HttpStatus.NOT_ACCEPTABLE);  
+            }
             LocalDateTime start = LocalDateTime.of(bookingDTO.getDate(), LocalTime.of(bookingDTO.getBtnradio(), 0));
-            LocalDateTime end  = start.plusHours(1);
+            LocalDateTime end  = start.plusHours(1).minusSeconds(1);
             if(bookingService.checkBookingTime(fno, start, end)) {
                 BookingDTO newBookingDTO = BookingDTO.builder()
                     .bno(bookingDTO.getBno())
@@ -86,16 +98,20 @@ public class BookingController {
             return new ResponseEntity<>(saveDto, HttpStatus.CREATED);
             }
             else
-               return new ResponseEntity<>("예약 시간을 확인하세요.", HttpStatus.BAD_REQUEST);  
+                return new ResponseEntity<>("예약 시간을 확인해 주세요.", HttpStatus.NOT_ACCEPTABLE);  
         }
     }
+
 
     @PostMapping(path="/{fno}/date", produces = "application/json")
     public ResponseEntity<?> bookingByDate(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO) {
         LocalDate date =bookingDTO.getDate();
         List<BookingDTO> bookingDTOs = bookingService.findBookingListByFacilityWhitDate(fno, date);
-        
-        return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
+        if(bookingDTOs.size()==0) {
+            return new ResponseEntity<>("예약 날짜를 확인해 주세요.", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else
+            return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
     }
     
     @DeleteMapping(path="/{bno}", produces = "application/json")
@@ -105,13 +121,13 @@ public class BookingController {
 
         if(sid == null) {
             return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.MOVED_PERMANENTLY);
-        } 
-        if (bookingService.findByBno(bno)==null){
-            return new ResponseEntity<>("fno can not found", HttpStatus.NOT_ACCEPTABLE); 
         }
         else {
-            bookingService.deleteBooking(bno);
-            return new ResponseEntity<>("삭제되었습니다.",HttpStatus.OK);
+            if(bookingService.checkByBnoSid(sid, bno)){
+                bookingService.deleteBooking(bno);
+                return new ResponseEntity<>("삭제되었습니다.",HttpStatus.OK);
+            }
+            return new ResponseEntity<>("예약을 번호를 확인해 주세요.", HttpStatus.NOT_ACCEPTABLE);       
         }
     }
 }
