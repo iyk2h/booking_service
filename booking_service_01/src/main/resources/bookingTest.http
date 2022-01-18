@@ -1,0 +1,56 @@
+### main 홈
+get http://127.0.0.1:8000/booking
+
+### 로그인
+POST http://127.0.0.1:8000/students/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "sid":1,
+  "pw":"pwd"
+}
+
+### 로그아웃
+GET http://127.0.0.1:8000/students/logout HTTP/1.1
+
+### 예약 리스트 보기   
+POST http://127.0.0.1:8000/booking/2/date HTTP/1.1
+Content-Type: application/json
+
+{
+  "date":"2022-01-01"
+}
+
+### 예약하기 
+POST http://127.0.0.1:8000/booking/2 HTTP/1.1
+Content-Type: application/json
+
+{
+  "date":"2022-01-01",
+  "btnradio":14
+}
+
+### 예약하기 -시간 test
+POST http://127.0.0.1:8000/booking/2 HTTP/1.1
+Content-Type: application/json
+
+{
+  "date":"2022-01-01",
+  "btnradio":-1
+}
+
+### 예약하기 24시 test
+POST http://127.0.0.1:8000/booking/2 HTTP/1.1
+Content-Type: application/json
+
+{
+  "date":"2022-01-01",
+  "btnradio":24
+}
+
+### 학생 예약 리스트 보기
+GET http://127.0.0.1:8000/booking/list HTTP/1.1
+Content-Type: application/json
+
+### 예약 삭제
+DELETE http://127.0.0.1:8000/booking/1000 HTTP/1.1
