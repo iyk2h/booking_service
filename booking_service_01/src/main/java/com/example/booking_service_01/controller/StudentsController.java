@@ -1,11 +1,9 @@
 package com.example.booking_service_01.controller;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.example.booking_service_01.dto.JwtStudentsDTO;
@@ -37,11 +35,11 @@ public class StudentsController {
     public ResponseEntity<?> insertStudent(@RequestBody StudentsDTO studentsDTO) {
         if(studentsDTO.getSid()!=null) {
             if (studentsService.checkSid(studentsDTO.getSid()))
-                return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<>("id가 이미 존재합니다.",HttpStatus.PRECONDITION_FAILED);
             return new ResponseEntity<>(studentsService.findBySid(studentsService.insertStudentsDTO(studentsDTO)), HttpStatus.CREATED);
         }
         else{
-            return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+            return new ResponseEntity<>("잘못 입력되었습니다.",HttpStatus.PRECONDITION_FAILED);
         }
     }
 
@@ -59,7 +57,14 @@ public class StudentsController {
 
     //Update   
     @PutMapping(path = "/{sid}", produces = "application/json")
-    public ResponseEntity<?> updateStudent(@PathVariable("sid") Integer sid, @RequestBody StudentsDTO studentsDTO) {
+    public ResponseEntity<?> updateStudent(@PathVariable("sid") Integer sid, @RequestBody StudentsDTO studentsDTO, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Integer sessionId = (Integer)session.getAttribute("id");
+
+        if(sessionId != sid || sessionId==null) {
+            session.invalidate();
+            return new ResponseEntity<>("잘못된 경로입니다.", HttpStatus.UNAUTHORIZED);
+        }
         StudentsDTO beforeDTO = studentsService.findBySid(sid);
         if(studentsDTO != null){
             Integer u_sid = studentsDTO.getSid()!=null?sid:beforeDTO.getSid();
@@ -82,7 +87,14 @@ public class StudentsController {
     
     //Delete
     @DeleteMapping(path="/{sid}", produces = "application/json")
-    public ResponseEntity<?> deleteStudent(@PathVariable("sid") Integer sid) {
+    public ResponseEntity<?> deleteStudent(@PathVariable("sid") Integer sid, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Integer sessionId = (Integer)session.getAttribute("id");
+
+        if(sessionId != sid || sessionId==null) {
+            session.invalidate();
+            return new ResponseEntity<>("잘못된 경로입니다.", HttpStatus.UNAUTHORIZED);
+        }
         if(!studentsService.checkSid(sid))
             return new ResponseEntity<>("Admin ID can not found", HttpStatus.NOT_ACCEPTABLE);
         else {
