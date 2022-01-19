@@ -58,7 +58,7 @@ public class StudentsController {
     }
 
     //Update   
-    @PutMapping(path = "/{sid}/", produces = "application/json")
+    @PutMapping(path = "/{sid}", produces = "application/json")
     public ResponseEntity<?> updateStudent(@PathVariable("sid") Integer sid, @RequestBody StudentsDTO studentsDTO) {
         StudentsDTO beforeDTO = studentsService.findBySid(sid);
         if(studentsDTO != null){
@@ -127,29 +127,5 @@ public class StudentsController {
         org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
         httpHeaders.setLocation(redirectUrl);
         return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);
-    }
-    
-    @GetMapping("/test")
-    public ResponseEntity<?> test(HttpServletResponse response) throws URISyntaxException{
-    	URI redirect_uri=new URI("http://www.google.com");
-        org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
-        httpHeaders.setLocation(redirect_uri);
-        return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);    
-    }
-    
-    @GetMapping("/test2")
-    public ResponseEntity<?> test2(HttpServletResponse response) throws URISyntaxException, IOException{
-    	URI redirect_uri=new URI("http://www.google.com");
-        org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
-        httpHeaders.setLocation(redirect_uri);
-        String redirecturi="http://www.google.com";
-        response.sendRedirect(redirecturi);
-        return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);    
-    }
-    
-    @GetMapping("/google")
-    public void oauthLogin(HttpServletResponse response) throws IOException{
-    	String redirect_uri="http://www.google.com";
-    	response.sendRedirect(redirect_uri);
     }
 }
