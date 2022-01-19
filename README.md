@@ -57,7 +57,15 @@ HTTP 프로토콜을 그대로 활용해 웹의 장점을 최대한 활용할 �
 
 [test](../API 명세서/student_booking.md) 
 
-[test2](../booking_service/blob/master/API%20명세서/student_booking.md)
+[test2](../master/API%20명세서/student_booking.md)
+
+
+
+https://github.com/iyk2h/booking_service/blob/booking_service/blob/master/API%20%EB%AA%85%EC%84%B8%EC%84%9C/student_booking.md
+
+https://github.com/iyk2h/booking_service/blob/master/API%20%EB%AA%85%EC%84%B8%EC%84%9C/student_booking.md
+
+
 
 
 
