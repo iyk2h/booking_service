@@ -53,7 +53,9 @@ HTTP 프로토콜을 그대로 활용해 웹의 장점을 최대한 활용할 �
 
 
 
+- ## api 명세서
 
+[test](../booking_service/API 명세서/student_booking.md) 
 
 
 
