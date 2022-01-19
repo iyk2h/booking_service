@@ -55,17 +55,11 @@ HTTP 프로토콜을 그대로 활용해 웹의 장점을 최대한 활용할 �
 
 - ## api 명세서
 
-[test](../API 명세서/student_booking.md) 
-
-[test2](../master/API%20명세서/student_booking.md)
 
 
+#### [사용자 예약 로직 명세서](../master/API%20명세서/student_booking.md)
 
-https://github.com/iyk2h/booking_service/blob/booking_service/blob/master/API%20%EB%AA%85%EC%84%B8%EC%84%9C/student_booking.md
-
-https://github.com/iyk2h/booking_service/blob/master/API%20%EB%AA%85%EC%84%B8%EC%84%9C/student_booking.md
-
-
+사용자 로그인, 로그아웃, 예약 가능 리스트 보기, 예약하기, 사용자가 예약한 목록 보기, 사용자가 예약한 예약 삭제
 
 
 
