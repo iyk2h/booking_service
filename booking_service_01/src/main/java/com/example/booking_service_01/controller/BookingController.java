@@ -1,11 +1,8 @@
 package com.example.booking_service_01.controller;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,15 +10,12 @@ import javax.servlet.http.HttpSession;
 
 import com.example.booking_service_01.dto.BookingDTO;
 import com.example.booking_service_01.dto.FacilityDTO;
-import com.example.booking_service_01.dto.StudentsDTO;
-import com.example.booking_service_01.entity.Students;
 import com.example.booking_service_01.service.BookingService;
 import com.example.booking_service_01.service.FacilityService;
 import com.example.booking_service_01.service.StudentsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,8 +24,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(path="/booking")
@@ -101,7 +93,18 @@ public class BookingController {
                 return new ResponseEntity<>("예약 시간을 확인해 주세요.", HttpStatus.NOT_ACCEPTABLE);  
         }
     }
-
+    @GetMapping(path = "/list", produces = "application/json")
+    public ResponseEntity<?> bookingListByStudentSession(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Integer sid = (Integer) session.getAttribute("id");
+        if(sid == null) {
+            return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else {
+            List<BookingDTO> bookingDTOs = bookingService.findBySid(sid);
+            return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
+        } 
+    }
 
     @PostMapping(path="/{fno}/date", produces = "application/json")
     public ResponseEntity<?> bookingByDate(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO) {
@@ -130,4 +133,5 @@ public class BookingController {
             return new ResponseEntity<>("예약을 번호를 확인해 주세요.", HttpStatus.NOT_ACCEPTABLE);       
         }
     }
+    
 }
