@@ -1,8 +1,46 @@
+
+### 로그인
+
+```http
+POST http://127.0.0.1:8000/students/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "sid":2,
+  "pw":"pwd"
+}
+```
+
+```http
+HTTP/1.1 200 
+Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+Set-Cookie: SID=889163EA29EE8EBC56326816612E1099; Max-Age=2592000; Expires=Fri, 18-Feb-2022 06:15:38 GMT; Path=/; HttpOnly
+Content-Type: application/json
+Content-Length: 6
+Date: Wed, 19 Jan 2022 06:15:38 GMT
+Connection: close
+
+성공
+```
+
+### 로그아웃
+
+``` http
+GET http://127.0.0.1:8000/students/logout HTTP/1.1
+```
+
+``` http
+HTTP/1.1 200 
+Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+Location: /booking
+Content-Length: 0
+Date: Wed, 19 Jan 2022 08:46:07 GMT
+Connection: close
+```
 ### main 홈
 
 ```http
-get http://127.0.0.1:8000/booking
-
+GET http://127.0.0.1:8000/booking HTTP/1.1
 ```
 
 ```http
@@ -33,30 +71,6 @@ Connection: close
     "scale": "user"
   }
 ]
-```
-
-### 로그인
-
-```http
-POST http://127.0.0.1:8000/students/login HTTP/1.1
-Content-Type: application/json
-
-{
-  "sid":2,
-  "pw":"pwd"
-}
-```
-
-```http
-HTTP/1.1 200 
-Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
-Set-Cookie: SID=889163EA29EE8EBC56326816612E1099; Max-Age=2592000; Expires=Fri, 18-Feb-2022 06:15:38 GMT; Path=/; HttpOnly
-Content-Type: application/json
-Content-Length: 6
-Date: Wed, 19 Jan 2022 06:15:38 GMT
-Connection: close
-
-성공
 ```
 
 ### 특정 날짜 예약 리스트 보기  
@@ -299,39 +313,5 @@ Connection: close
 
 예약을 번호를 확인해 주세요.
 
-```
-
-``` http
-```
-
-``` http
-```
-
-``` http
-```
-
-``` http
-
-```
-
-``` http
-```
-
-``` http
-```
-
-``` http
-```
-
-``` http
-```
-
-``` http
-```
-
-``` http
-```
-
-``` http
 ```
 
