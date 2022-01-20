@@ -27,7 +27,7 @@ Content-Type: application/json
 
 {
   "date":"2022-01-01",
-  "btnradio":14
+  "selectedTime":14
 }
 
 ### 예약하기 -시간 test
@@ -36,7 +36,7 @@ Content-Type: application/json
 
 {
   "date":"2022-01-01",
-  "btnradio":-1
+  "selectedTime":"11:00"
 }
 
 ### 예약하기 24시 test
@@ -45,7 +45,7 @@ Content-Type: application/json
 
 {
   "date":"2022-01-01",
-  "btnradio":24
+  "selectedTime":24
 }
 
 ### 학생 예약 리스트 보기

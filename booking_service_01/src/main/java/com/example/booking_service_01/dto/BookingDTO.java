@@ -2,6 +2,7 @@ package com.example.booking_service_01.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -11,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Builder
 @Getter
@@ -27,5 +27,6 @@ public class BookingDTO {
     private LocalDateTime endTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-    private Integer btnradio;
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime selectedTime;
 }

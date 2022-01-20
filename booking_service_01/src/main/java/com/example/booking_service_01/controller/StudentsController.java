@@ -106,7 +106,6 @@ public class StudentsController {
 
     //Login
     @PostMapping(path = "/login", produces = "application/json")
-
     public ResponseEntity<?> loginAdmin(@RequestBody JwtStudentsDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
         if(!studentsService.checkSid(loginDTO.getSid())) {
             return new ResponseEntity<>("sid can not found", HttpStatus.UNAUTHORIZED);

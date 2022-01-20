@@ -100,7 +100,7 @@ Connection: close
     "startTime": "2022-01-01 00:00",
     "endTime": "2022-01-01 00:59",
     "date": null,
-    "btnradio": null
+    "selectedTime": null
   },
   {
     "bno": 9,
@@ -109,7 +109,7 @@ Connection: close
     "startTime": "2022-01-01 01:00",
     "endTime": "2022-01-01 01:59",
     "date": null,
-    "btnradio": null
+    "selectedTime": null
   },
 ...
 ]
@@ -124,7 +124,7 @@ Content-Type: application/json
 
 {
   "date":"2022-01-01",
-  "btnradio":0
+  "selectedTime":0
 }
 ```
 
@@ -145,7 +145,7 @@ Connection: close
   "startTime": "2022-01-01 14:00",
   "endTime": "2022-01-01 14:59",
   "date": null,
-  "btnradio": null
+  "selectedTime": null
 }
 
 ```
@@ -200,7 +200,7 @@ Content-Type: application/json
 
 {
   "date":"2022-01-01",
-  "btnradio":-1
+  "selectedTime":-1
 }
 ```
 
@@ -225,7 +225,7 @@ Content-Type: application/json
 
 {
   "date":"2022-01-01",
-  "btnradio":24
+  "selectedTime":24
 }
 ```
 
@@ -264,7 +264,7 @@ Connection: close
     "startTime": "2022-01-16 02:00",
     "endTime": "2022-01-16 03:00",
     "date": null,
-    "btnradio": null
+    "selectedTime": null
   },
   {
     "bno": 7,
@@ -273,7 +273,7 @@ Connection: close
     "startTime": "2022-01-11 02:00",
     "endTime": "2022-01-11 03:00",
     "date": null,
-    "btnradio": null
+    "selectedTime": null
   },
   ...
 ]

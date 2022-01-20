@@ -2,7 +2,6 @@ package com.example.booking_service_01.controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,13 +57,11 @@ public class BookingController {
     //Booking facility, student
     @PostMapping(path="/{fno}", produces = "application/json")
     public ResponseEntity<?> bookingFacilityStudent(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO,HttpServletRequest request)  {
-        System.out.println("fno="+fno);
-        System.out.println("date="+bookingDTO.getDate());
-        System.out.println("btn="+bookingDTO.getBtnradio());
-        
         HttpSession session = request.getSession();
         Integer sid = (Integer) session.getAttribute("id");
-        System.out.println("sid="+sid);
+        
+        Integer time = bookingDTO.getSelectedTime().getHour();
+
         if(sid == null) {
             return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -72,10 +69,10 @@ public class BookingController {
             return new ResponseEntity<>("시설을 확인해 주세요.", HttpStatus.NOT_ACCEPTABLE);
         }
         else {
-            if(bookingDTO.getBtnradio() >=24 || bookingDTO.getBtnradio() <0) {
+            if(time>=24 || time<0) {
                 return new ResponseEntity<>("예약 시간을 확인해 주세요.", HttpStatus.NOT_ACCEPTABLE);  
             }
-            LocalDateTime start = LocalDateTime.of(bookingDTO.getDate(), LocalTime.of(bookingDTO.getBtnradio(), 0));
+            LocalDateTime start = LocalDateTime.of(bookingDTO.getDate(), bookingDTO.getSelectedTime());
             LocalDateTime end  = start.plusHours(1).minusSeconds(1);
             if(bookingService.checkBookingTime(fno, start, end)) {
                 BookingDTO newBookingDTO = BookingDTO.builder()
@@ -133,5 +130,4 @@ public class BookingController {
             return new ResponseEntity<>("예약을 번호를 확인해 주세요.", HttpStatus.NOT_ACCEPTABLE);       
         }
     }
-    
 }
