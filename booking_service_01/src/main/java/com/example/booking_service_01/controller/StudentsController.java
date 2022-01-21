@@ -27,27 +27,41 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudentsController {
     @Autowired
     StudentsService studentsService;
-    // @Autowired
-    // StudentsRepository studentsRepository;
     
     //Insert
     @PostMapping(path = "/join", produces = "application/json")
     public ResponseEntity<?> insertStudent(@RequestBody StudentsDTO studentsDTO) {
         if(studentsDTO.getSid()!=null) {
             if (studentsService.checkSid(studentsDTO.getSid()))
-                return new ResponseEntity<>("id가 이미 존재합니다.",HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<>("id가 이미 존재합니다.",HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(studentsService.findBySid(studentsService.insertStudentsDTO(studentsDTO)), HttpStatus.CREATED);
         }
         else{
-            return new ResponseEntity<>("잘못 입력되었습니다.",HttpStatus.PRECONDITION_FAILED);
+            return new ResponseEntity<>("잘못 입력되었습니다.",HttpStatus.NOT_FOUND);
         }
     }
 
-    //Select 
+    //Select  
     @GetMapping(path="/{sid}", produces = "application/json")
-    public ResponseEntity<?> getSid(@PathVariable("sid") Integer sid) {
+    public ResponseEntity<?> getSid(@PathVariable("sid") Integer sid, HttpServletRequest request) {
+        //admin
         if(!studentsService.checkSid(sid)) {
-            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_FOUND);
+        }
+        else {
+            StudentsDTO studentsDTO = studentsService.findBySid(sid);
+            return new ResponseEntity<>(studentsDTO, HttpStatus.OK);
+        }
+    }
+
+    //mypage
+    @GetMapping(path = "/mypage", produces = "application/json")
+    public ResponseEntity<?> mypage(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Integer sid = (Integer) session.getAttribute("id");
+        if(sid==null) {
+            session.invalidate();
+            return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED);
         }
         else {
             StudentsDTO studentsDTO = studentsService.findBySid(sid);
@@ -60,10 +74,9 @@ public class StudentsController {
     public ResponseEntity<?> updateStudent(@PathVariable("sid") Integer sid, @RequestBody StudentsDTO studentsDTO, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Integer sessionId = (Integer)session.getAttribute("id");
-
-        if(sessionId != sid || sessionId==null) {
+        if(sessionId==null) {
             session.invalidate();
-            return new ResponseEntity<>("잘못된 경로입니다.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED);
         }
         StudentsDTO beforeDTO = studentsService.findBySid(sid);
         if(studentsDTO != null){
@@ -85,26 +98,26 @@ public class StudentsController {
             return new ResponseEntity<>("Update fail", HttpStatus.NOT_ACCEPTABLE);
     }
     
-    //Delete
+    //Delete 탈퇴
     @DeleteMapping(path="/{sid}", produces = "application/json")
     public ResponseEntity<?> deleteStudent(@PathVariable("sid") Integer sid, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Integer sessionId = (Integer)session.getAttribute("id");
+        StudentsDTO studentsDTO = studentsService.findBySid(sid);
 
-        if(sessionId != sid || sessionId==null) {
+        if(sessionId==null) {
             session.invalidate();
-            return new ResponseEntity<>("잘못된 경로입니다.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED);
         }
         if(!studentsService.checkSid(sid))
-            return new ResponseEntity<>("Admin ID can not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_FOUND);
         else {
-            StudentsDTO studentsDTO = studentsService.findBySid(sid);
             studentsService.delete(studentsDTO);
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
         }
     }
 
-    //Login
+    //Login 로그인
     @PostMapping(path = "/login", produces = "application/json")
     public ResponseEntity<?> loginAdmin(@RequestBody JwtStudentsDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
         if(!studentsService.checkSid(loginDTO.getSid())) {
@@ -119,10 +132,10 @@ public class StudentsController {
                 // URI redirectUrl = new URI("/booking");
                 // org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
                 // httpHeaders.setLocation(redirectUrl);
-            return new ResponseEntity<>("성공", HttpStatus.OK);
+            return new ResponseEntity<>("성공", HttpStatus.CREATED);
             }
             else {
-                return new ResponseEntity<>("login fail", HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>("login fail", HttpStatus.NOT_FOUND);
             }
         }
     } 
@@ -131,12 +144,12 @@ public class StudentsController {
     @GetMapping(path = "/logout", produces = "application/json")
     public ResponseEntity<?> logoutStudent(HttpServletRequest request) throws URISyntaxException {
         HttpSession session = request.getSession();
-        if(session != null){
+        if(session == null) {
+            return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        }
+        else{
             session.invalidate();
         }
-        URI redirectUrl = new URI("/booking");
-        org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
-        httpHeaders.setLocation(redirectUrl);
-        return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
