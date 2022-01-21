@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Test Code ###
+src/main/resources/httpTest/
+
