@@ -80,7 +80,7 @@ POST http://127.0.0.1:8000/booking/2/date HTTP/1.1
 Content-Type: application/json
 
 {
-  "date":"2022-01-01"
+  "date	":"2022-01-01"
 }
 ```
 

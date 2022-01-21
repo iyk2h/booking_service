@@ -51,17 +51,17 @@ HTTP 프로토콜을 그대로 활용해 웹의 장점을 최대한 활용할 �
 
 
 
-- ## api 명세서
+- ## 명세서
 
 
 
-#### [사용자 예약 로직 명세서](../master/API%20명세서/student_booking_api.md)
+#### [사용자 예약 로직 명세서](../masterd/Documents/student_booking_api.md)
 
 사용자 로그인, 로그아웃, 예약 가능 리스트 보기, 예약하기, 사용자가 예약한 목록 보기, 사용자가 예약한 예약 삭제
 
 
 
-#### [사용자 로직 명세서](../master/API%20명세서/student_api.md)
+#### [사용자 로직 명세서](../master/Documents/student_api.md)
 
 로그인, 로그아웃, 회원가입, 회원 id로 조회, 회원 정보 수정, 회원 탈퇴
 
