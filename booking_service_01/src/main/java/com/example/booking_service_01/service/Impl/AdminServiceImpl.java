@@ -41,7 +41,6 @@ public class AdminServiceImpl implements AdminService{
         HttpSession session = request.getSession();
         String id = (String) session.getAttribute("id");
         String role = (String) session.getAttribute("role");
-        
         if(aid != id || role != "admin"){
             return false;
         }
