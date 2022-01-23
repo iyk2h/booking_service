@@ -33,7 +33,7 @@ public class AdminController {
     StudentsService studentsService;
     
     //Insert
-    @PostMapping(path = "/join", produces = "application/json")
+    @PostMapping(path = "", produces = "application/json")
     public ResponseEntity<?> insertAdmin(@RequestBody AdminDTO adminDTO) {
         if(adminDTO.getAid()!=null) {
             if (adminService.checkAid(adminDTO.getAid()))
@@ -45,9 +45,13 @@ public class AdminController {
         }
     }
 
-    //Select by aid
-    @GetMapping(path="/{aid}", produces = "application/json")
-    public ResponseEntity<?> getAid(@PathVariable("aid") String aid) {
+    //mypage
+    @GetMapping(path="", produces = "application/json")
+    public ResponseEntity<?> getAid(HttpServletRequest request) {
+        String aid = adminService.checkAdminRole(request);
+        if(aid == null){
+            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        }
         if(!adminService.checkAid(aid)) {
             return new ResponseEntity<>("aid can not found", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -58,8 +62,12 @@ public class AdminController {
     }
 
     //Update   
-    @PutMapping(path = "/{aid}", produces = "application/json")
-    public ResponseEntity<?> updateAdmin(@PathVariable("aid") String aid, @RequestBody AdminDTO adminDTO) {
+    @PutMapping(path = "", produces = "application/json")
+    public ResponseEntity<?> updateAdmin(@RequestBody AdminDTO adminDTO, HttpServletRequest request) {
+        String aid = adminService.checkAdminRole(request);
+        if(aid == null){
+            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        }
         AdminDTO beforeDTO = adminService.findByAid(aid);
         if(adminDTO != null){
             String u_aid = adminDTO.getAid()!=null?aid:beforeDTO.getAid();
@@ -83,9 +91,12 @@ public class AdminController {
     }
 
     //Delete
-    @DeleteMapping(path="/{aid}", produces = "application/json")
-    public ResponseEntity<?> deleteAdmin(@PathVariable("aid") String aid, HttpServletRequest request) {
-
+    @DeleteMapping(path="", produces = "application/json")
+    public ResponseEntity<?> deleteAdmin(HttpServletRequest request) {
+        String aid = adminService.checkAdminRole(request);
+        if(aid == null){
+            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        }
         if(!adminService.checkAid(aid))
             return new ResponseEntity<>("Admin ID can not found", HttpStatus.NOT_ACCEPTABLE);
         else {
@@ -115,26 +126,28 @@ public class AdminController {
     }  
     //logout
     @PostMapping(path = "/logout", produces = "application/json")
-    public ResponseEntity<?> logoutAdmin(HttpServletRequest request) throws URISyntaxException {
+    public ResponseEntity<?> logoutAdmin(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if(session != null){
             session.invalidate();
         }
-        URI redirectUrl = new URI("/admin");
-        org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
-        httpHeaders.setLocation(redirectUrl);
-        return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // //사용자 list
     @GetMapping(path="/students", produces = "application/json")
-    public ResponseEntity<?> getSid(){
+    public ResponseEntity<?> getSid(HttpServletRequest request){
+        if(adminService.checkAdminRole(request) == null){
+            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        }
         return new ResponseEntity<>(studentsService.findAll(), HttpStatus.OK);
     }
     //Select  
     @GetMapping(path="/students/{sid}", produces = "application/json")
     public ResponseEntity<?> getSid(@PathVariable("sid") Integer sid, HttpServletRequest request) {
-        //admin
+        if(adminService.checkAdminRole(request) == null){
+            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        }
         if(!studentsService.checkSid(sid)) {
             return new ResponseEntity<>("sid can not found", HttpStatus.NOT_ACCEPTABLE);
         }

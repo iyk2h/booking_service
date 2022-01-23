@@ -36,16 +36,16 @@ public class AdminServiceImpl implements AdminService{
     }
     
     @Override
-    public boolean checkAdminRole(String aid, HttpServletRequest request) {
-
+    public String checkAdminRole(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String id = (String) session.getAttribute("id");
         String role = (String) session.getAttribute("role");
-        if(aid != id || role != "admin"){
-            return false;
+        Admin admin = adminRepository.findByAid(id);
+        if(admin == null || role != "admin"){
+            return id = null;
         }
         else {
-            return true;
+            return id;
         }
     }
 
