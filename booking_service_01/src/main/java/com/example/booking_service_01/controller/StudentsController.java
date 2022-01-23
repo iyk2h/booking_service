@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +27,7 @@ public class StudentsController {
     StudentsService studentsService;
     
     //Insert
-    @PostMapping(path = "/join", produces = "application/json")
+    @PostMapping(path = "", produces = "application/json")
     public ResponseEntity<?> insertStudent(@RequestBody StudentsDTO studentsDTO) {
         if(studentsDTO.getSid()!=null) {
             if (studentsService.checkSid(studentsDTO.getSid()))
@@ -40,26 +39,11 @@ public class StudentsController {
         }
     }
 
-    //Select  
-    @GetMapping(path="/{sid}", produces = "application/json")
-    public ResponseEntity<?> getSid(@PathVariable("sid") Integer sid, HttpServletRequest request) {
-        //admin
-        if(!studentsService.checkSid(sid)) {
-            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_FOUND);
-        }
-        else {
-            StudentsDTO studentsDTO = studentsService.findBySid(sid);
-            return new ResponseEntity<>(studentsDTO, HttpStatus.OK);
-        }
-    }
-
     //mypage
-    @GetMapping(path = "/mypage", produces = "application/json")
+    @GetMapping(path = "", produces = "application/json")
     public ResponseEntity<?> mypage(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Integer sid = (Integer) session.getAttribute("id");
+        Integer sid = studentsService.checkSessionSid(request);
         if(sid==null) {
-            session.invalidate();
             return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED);
         }
         else {
@@ -69,12 +53,10 @@ public class StudentsController {
     }
 
     //Update   
-    @PutMapping(path = "/{sid}", produces = "application/json")
-    public ResponseEntity<?> updateStudent(@PathVariable("sid") Integer sid, @RequestBody StudentsDTO studentsDTO, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Integer sessionId = (Integer)session.getAttribute("id");
-        if(sessionId==null) {
-            session.invalidate();
+    @PutMapping(path = "", produces = "application/json")
+    public ResponseEntity<?> updateStudent(@RequestBody StudentsDTO studentsDTO, HttpServletRequest request) {
+        Integer sid = studentsService.checkSessionSid(request);
+        if(sid==null) {
             return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED);
         }
         StudentsDTO beforeDTO = studentsService.findBySid(sid);
@@ -98,27 +80,24 @@ public class StudentsController {
     }
     
     //Delete 탈퇴
-    @DeleteMapping(path="/{sid}", produces = "application/json")
-    public ResponseEntity<?> deleteStudent(@PathVariable("sid") Integer sid, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Integer sessionId = (Integer)session.getAttribute("id");
-        StudentsDTO studentsDTO = studentsService.findBySid(sid);
-
-        if(sessionId==null) {
-            session.invalidate();
+    @DeleteMapping(path="", produces = "application/json")
+    public ResponseEntity<?> deleteStudent(HttpServletRequest request) {
+        Integer sid = studentsService.checkSessionSid(request);
+        if(sid==null) {
             return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED);
         }
         if(!studentsService.checkSid(sid))
             return new ResponseEntity<>("sid can not found", HttpStatus.NOT_FOUND);
         else {
+            StudentsDTO studentsDTO = studentsService.findBySid(sid);
             studentsService.delete(studentsDTO);
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
         }
     }
 
-    //Login 로그인
+    //LoginStudent
     @PostMapping(path = "/login", produces = "application/json")
-    public ResponseEntity<?> loginAdmin(@RequestBody JwtStudentsDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
+    public ResponseEntity<?> loginStudent(@RequestBody JwtStudentsDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
         if(!studentsService.checkSid(loginDTO.getSid())) {
             return new ResponseEntity<>("sid can not found", HttpStatus.UNAUTHORIZED);
         }

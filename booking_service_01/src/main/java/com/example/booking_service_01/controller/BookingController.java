@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.example.booking_service_01.dto.BookingDTO;
 import com.example.booking_service_01.service.BookingService;
@@ -52,13 +51,10 @@ public class BookingController {
     //Booking facility, student
     @PostMapping(path="/{fno}", produces = "application/json")
     public ResponseEntity<?> bookingFacilityStudent(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO,HttpServletRequest request)  {
-        HttpSession session = request.getSession();
-        Integer sid = (Integer) session.getAttribute("id");
-        
         Integer time = bookingDTO.getSelectedTime().getHour();
         Integer seletedHour = bookingDTO.getMaxHour();
-
-        if(sid == null) {
+        Integer sid = studentsService.checkSessionSid(request);
+        if(sid==null) {
             return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED);
         }
         if(!facilityService.checkFno(fno)) {
@@ -90,9 +86,8 @@ public class BookingController {
     // 사용자 자신이 예약한 리스트 보기
     @GetMapping(path = "/students", produces = "application/json")
     public ResponseEntity<?> bookingListByStudentSession(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Integer sid = (Integer) session.getAttribute("id");
-        if(sid == null) {
+        Integer sid = studentsService.checkSessionSid(request);
+        if(sid==null) {
             return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED);
         }
         else {
@@ -117,9 +112,8 @@ public class BookingController {
     // 예약 삭제
     @DeleteMapping(path="/{bno}", produces = "application/json")
     public ResponseEntity<?> deleteBookingByBno(@PathVariable("bno") Integer bno, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Integer sid = (Integer) session.getAttribute("id");
-        if(sid == null) {
+        Integer sid = studentsService.checkSessionSid(request);
+        if(sid==null) {
             return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED);
         }
         else {

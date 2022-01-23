@@ -134,7 +134,7 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // //사용자 list
+    //사용자 list
     @GetMapping(path="/students", produces = "application/json")
     public ResponseEntity<?> getSid(HttpServletRequest request){
         if(adminService.checkAdminRole(request) == null){
@@ -142,7 +142,7 @@ public class AdminController {
         }
         return new ResponseEntity<>(studentsService.findAll(), HttpStatus.OK);
     }
-    //Select  
+    //Select 
     @GetMapping(path="/students/{sid}", produces = "application/json")
     public ResponseEntity<?> getSid(@PathVariable("sid") Integer sid, HttpServletRequest request) {
         if(adminService.checkAdminRole(request) == null){

@@ -2,6 +2,9 @@ package com.example.booking_service_01.service.Impl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.entity.Booking;
 import com.example.booking_service_01.entity.Students;
@@ -73,6 +76,15 @@ public class StudentsServiceImpl implements StudentsService{
         Students students = BookingMapper.INSTANCE.studentsDTO_To_Entity(studentsDTO);
         studentsRepository.save(students);
         return students.getSid();
+    }
+
+    @Override
+    public Integer checkSessionSid(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Integer sid = (Integer) session.getAttribute("id");
+        if(sid == null)
+            sid = null;
+        return sid;
     }
 
 
