@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.example.booking_service_01.dto.BookingDTO;
-import com.example.booking_service_01.dto.FacilityDTO;
 import com.example.booking_service_01.service.BookingService;
 import com.example.booking_service_01.service.FacilityService;
 import com.example.booking_service_01.service.StudentsService;
@@ -16,15 +15,15 @@ import com.example.booking_service_01.service.StudentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping(path="/booking")
 public class BookingController {
     @Autowired
@@ -33,16 +32,6 @@ public class BookingController {
     BookingService bookingService;
     @Autowired
     StudentsService studentsService;
-
-    //facility list
-    @GetMapping(path="", produces = "application/json")
-    public ResponseEntity<?> getAllFacility() {
-        List<FacilityDTO> dtos = facilityService.findAll();
-        if(dtos.size() <= 0) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
-    }
 
     //Select by fno
     @GetMapping(path="/{fno}", produces = "application/json")
@@ -67,6 +56,7 @@ public class BookingController {
         Integer sid = (Integer) session.getAttribute("id");
         
         Integer time = bookingDTO.getSelectedTime().getHour();
+        Integer seletedHour = bookingDTO.getMaxHour();
 
         if(sid == null) {
             return new ResponseEntity<>("로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED);
@@ -79,7 +69,7 @@ public class BookingController {
                 return new ResponseEntity<>("예약 시간을 확인해 주세요.", HttpStatus.NOT_FOUND);  
             }
             LocalDateTime start = LocalDateTime.of(bookingDTO.getDate(), bookingDTO.getSelectedTime());
-            LocalDateTime end  = start.plusHours(1).minusSeconds(1);
+            LocalDateTime end  = start.plusHours(seletedHour).minusSeconds(1);
             if(bookingService.checkBookingTime(fno, start, end)) {
                 BookingDTO newBookingDTO = BookingDTO.builder()
                     .bno(bookingDTO.getBno())
