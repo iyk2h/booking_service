@@ -20,6 +20,12 @@ public class StudentsServiceImpl implements StudentsService{
     @Autowired
     BookingRepository bookingRepository;
 
+    @Override
+    public List<StudentsDTO> findAll() {
+        List<Students> students = studentsRepository.findAll();
+        List<StudentsDTO> studentsDTOs = BookingMapper.INSTANCE.students_To_List_DTO(students);
+        return studentsDTOs;
+    }
 
     @Override
     public StudentsDTO findBySid(Integer sid) {
@@ -68,5 +74,7 @@ public class StudentsServiceImpl implements StudentsService{
         studentsRepository.save(students);
         return students.getSid();
     }
+
+
     
 }
