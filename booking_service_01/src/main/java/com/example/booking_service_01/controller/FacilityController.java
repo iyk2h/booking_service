@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class FacilityController {
     @Autowired
     FacilityService facilityService;
-    // @Autowired
-    // FacilityRepository facilityRepository;
 
     //insert
     @PostMapping(path = "/join", produces = "application/json")
@@ -62,14 +60,16 @@ public class FacilityController {
         if(facilityDTO != null){
             Integer u_fno = facilityDTO.getFno()!=null?fno:beforeDTO.getFno();
             String u_place = facilityDTO.getPlace()!=null?facilityDTO.getPlace():beforeDTO.getPlace();
-            String u_scale = facilityDTO.getScale()!=null?facilityDTO.getScale():beforeDTO.getScale();
+            String u_placeUrl = facilityDTO.getPlaceUrl()!=null?facilityDTO.getPlaceUrl():beforeDTO.getPlaceUrl();
+            Integer u_maxHour = facilityDTO.getMaxHour()!=null?facilityDTO.getMaxHour():beforeDTO.getMaxHour();
             String u_name = facilityDTO.getName()!=null?facilityDTO.getName():beforeDTO.getName();
 
             FacilityDTO updateDTO= FacilityDTO.builder()
                 .fno(u_fno)
                 .place(u_place)
+                .placeUrl(u_placeUrl)
                 .name(u_name)
-                .scale(u_scale)
+                .maxHour(u_maxHour)
                 .build();
             
             return new ResponseEntity<>(facilityService.findByFno(facilityService.update(updateDTO)), HttpStatus.OK);

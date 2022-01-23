@@ -29,4 +29,5 @@ public class BookingDTO {
     private LocalDate date;
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime selectedTime;
+    Integer maxHour;
 }

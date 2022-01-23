@@ -13,5 +13,6 @@ public class FacilityDTO {
     private Integer fno;
     private String name;
     private String place;
-    private String scale; 
+    private String placeUrl;
+    private Integer maxHour; 
 }
