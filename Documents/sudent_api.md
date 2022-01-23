@@ -34,7 +34,7 @@ Location: /booking
 ### 회원가입 
 - #### request
 ```http
-POST /students/join 
+POST /students
 Content-Type: application/json
 
 {
@@ -58,10 +58,10 @@ Transfer-Encoding: chunked
 }
 ```
 
-### 회원 id 조회
+### 마이페이지
 - #### request
 ```http
-GET /students/{sid}
+GET /students
 Content-Type: application/json
 ```
 - #### response
@@ -83,7 +83,7 @@ Transfer-Encoding: chunked
 요소에 null값 넣을시 전에 있던 값 그대로 사용
 - #### request
 ```http
-PUT /students/{sid}
+PUT /students
 Content-Type: application/json
 
 {
@@ -109,7 +109,7 @@ Transfer-Encoding: chunked
 ### 회원 탈퇴
 - #### request
 ```http
-DELETE /students/{sid}
+DELETE /students
 ```
 - #### response
 ```http
