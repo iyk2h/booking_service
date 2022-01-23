@@ -1,7 +1,7 @@
 ### login
-
+- #### request
 ```http
-POST http://127.0.0.1:8000/students/login HTTP/1.1
+POST /students/login 
 Content-Type: application/json
 
 {
@@ -9,40 +9,32 @@ Content-Type: application/json
   "pw":"1234"
 }
 ```
-
+- #### response
 ```html
-HTTP/1.1 200 
-Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
-Set-Cookie: SID=57634CEE90B12F8548DCD485E50D3241; Max-Age=2592000; Expires=Fri, 18-Feb-2022 09:02:50 GMT; Path=/; HttpOnly
+ State : 200 
 Content-Type: application/json
-Content-Length: 6
-Date: Wed, 19 Jan 2022 09:02:50 GMT
-Connection: close
 
 성공
 ```
 
 ### logout
 
-```http
-GET http://127.0.0.1:8000/students/logout HTTP/1.1
-Content-Type: application/json
-```
+- #### request
 
 ```http
-HTTP/1.1 200 
-Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
-Set-Cookie: SID=2A5CD6A5FFBEBD367F4A64C82E1774BE; Max-Age=2592000; Expires=Fri, 18-Feb-2022 08:59:45 GMT; Path=/; HttpOnly
+GET /students/logout 
+Content-Type: application/json
+```
+- #### response
+```http
+ State : 204
 Location: /booking
-Content-Length: 0
-Date: Wed, 19 Jan 2022 08:59:45 GMT
-Connection: close
 ```
 
 ### 회원가입 
-
+- #### request
 ```http
-POST http://127.0.0.1:8000/students/join HTTP/1.1
+POST /students/join 
 Content-Type: application/json
 
 {
@@ -52,14 +44,11 @@ Content-Type: application/json
   "phone":"010010"
 }
 ```
-
+- #### response
 ```http
-HTTP/1.1 201 
-Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+ State : 201 
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Wed, 19 Jan 2022 09:11:44 GMT
-Connection: close
 
 {
   "sid": 123123,
@@ -70,19 +59,16 @@ Connection: close
 ```
 
 ### 회원 id 조회
-
+- #### request
 ```http
-GET http://127.0.0.1:8000/students/123123 HTTP/1.1
+GET /students/{sid}
 Content-Type: application/json
 ```
-
+- #### response
 ```http
-HTTP/1.1 200 
-Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+ State : 200 
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Wed, 19 Jan 2022 09:05:52 GMT
-Connection: close
 
 {
   "sid": 123123,
@@ -95,9 +81,9 @@ Connection: close
 ### 회원 정보 수정 
 
 요소에 null값 넣을시 전에 있던 값 그대로 사용
-
+- #### request
 ```http
-PUT http://127.0.0.1:8000/students/123123 HTTP/1.1
+PUT /students/{sid}
 Content-Type: application/json
 
 {
@@ -106,14 +92,11 @@ Content-Type: application/json
   "phone":"010010"
 }
 ```
-
+- #### response
 ```http
-HTTP/1.1 200 
-Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+ State : 200 
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Wed, 19 Jan 2022 09:12:21 GMT
-Connection: close
 
 {
   "sid": 123123,
@@ -124,16 +107,12 @@ Connection: close
 ```
 
 ### 회원 탈퇴
-
+- #### request
 ```http
-DELETE http://127.0.0.1:8000/students/123123 HTTP/1.1
+DELETE /students/{sid}
 ```
-
+- #### response
 ```http
-HTTP/1.1 200 
-Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
-Content-Length: 0
-Date: Wed, 19 Jan 2022 09:11:32 GMT
-Connection: close
+ State : 204
 ```
 
