@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class JwtAdminDTO {
-    private Integer ano;
+    private String aid;
     private String pw;
 }

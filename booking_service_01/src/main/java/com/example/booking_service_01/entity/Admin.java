@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Admin {
     @Id
     @Column(length = 20, nullable = false)
-    private Integer ano;
+    private String aid;
 
     @Column(length = 20, nullable = false)
     private String pw;

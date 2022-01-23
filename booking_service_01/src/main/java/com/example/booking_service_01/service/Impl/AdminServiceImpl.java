@@ -1,5 +1,8 @@
 package com.example.booking_service_01.service.Impl;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.example.booking_service_01.dto.AdminDTO;
 import com.example.booking_service_01.entity.Admin;
 import com.example.booking_service_01.mapper.BookingMapper;
@@ -17,26 +20,41 @@ public class AdminServiceImpl implements AdminService{
     
     //admin
     @Override
-    public AdminDTO findByAno(Integer ano) {
-        Admin admin = adminRepository.findByAno(ano);
+    public AdminDTO findByAid(String aid) {
+        Admin admin = adminRepository.findByAid(aid);
         AdminDTO adminDTO = BookingMapper.INSTANCE.admin_To_DTO(admin);
         return adminDTO;
     }
 
     @Override
-    public boolean checkAno(Integer ano) {
-        Admin admin = adminRepository.findByAno(ano);
+    public boolean checkAid(String aid) {
+        Admin admin = adminRepository.findByAid(aid);
         if(admin==null) {
             return false;
         }
         return true;
     }
+    
+    @Override
+    public boolean checkAdminRole(String aid, HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        String id = (String) session.getAttribute("id");
+        String role = (String) session.getAttribute("role");
+        
+        if(aid != id || role != "admin"){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 
     @Override
-    public Integer insertAdminDto(AdminDTO adminDTO) {
+    public String insertAdminDto(AdminDTO adminDTO) {
         Admin admin = BookingMapper.INSTANCE.adminDto_To_Entity(adminDTO);
         adminRepository.save(admin);
-        return admin.getAno();
+        return admin.getAid();
     }
 
     @Override
@@ -46,8 +64,8 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public boolean admin_login(Integer ano ,String pw) {
-        Admin admin = adminRepository.findByAno(ano);
+    public boolean admin_login(String aid ,String pw) {
+        Admin admin = adminRepository.findByAid(aid);
         if(admin.getPw().equals(pw)) {
             return true;
         }
@@ -56,10 +74,12 @@ public class AdminServiceImpl implements AdminService{
         }
     }
     @Override
-    public Integer update(AdminDTO adminDTO) {
+    public String update(AdminDTO adminDTO) {
         Admin admin = BookingMapper.INSTANCE.adminDto_To_Entity(adminDTO);
         adminRepository.save(admin);
-        return admin.getAno();
+        return admin.getAid();
     }
+
+ 
 
 }

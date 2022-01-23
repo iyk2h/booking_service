@@ -28,10 +28,13 @@ public class Facility {
     @Column(length = 20, nullable = false)
     private String name;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 50, nullable = false)
     private String place;
 
-    @Column(length = 20, nullable = false)
-    private String scale;
+    @Column(length = 200, nullable = false)
+    private String placeUrl;
+
+    @Column(length = 2, nullable = false)
+    private Integer maxHour;
 
 }

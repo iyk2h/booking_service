@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdminDTO {
-    private Integer ano;
+    private String aid;
     private String pw;
     private String name;
     private String phone; 

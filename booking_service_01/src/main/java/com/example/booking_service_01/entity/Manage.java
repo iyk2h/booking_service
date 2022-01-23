@@ -29,7 +29,7 @@ public class Manage {
     private Integer mno;
 
     @ManyToOne
-    @JoinColumn(name = "ano")
+    @JoinColumn(name = "aid")
     private Admin admin;
 
     @ManyToOne

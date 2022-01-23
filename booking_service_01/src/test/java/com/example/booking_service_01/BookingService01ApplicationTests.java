@@ -28,7 +28,7 @@ class BookingService01ApplicationTests {
     public void eToD(){
 		/*given */
 		final Admin admin= Admin.builder()
-			.ano(100)
+			.aid("id")
 			.pw("pw")
 			.name("name")
 			.phone("phone")
@@ -37,7 +37,7 @@ class BookingService01ApplicationTests {
 		/*when */
         final AdminDTO adminDto = BookingMapper.INSTANCE.admin_To_DTO(admin);
 		/*then */
-        assertEquals(100, adminDto.getAno());
+        assertEquals("id", adminDto.getAid());
         assertEquals("pw", adminDto.getPw());
         assertEquals("name", adminDto.getName());
         assertEquals("phone", adminDto.getPhone());
@@ -48,7 +48,7 @@ class BookingService01ApplicationTests {
     void DtoE() {
 		/*given */
 		final AdminDTO adminDTO = AdminDTO.builder()
-			.ano(1)
+			.aid("id")
 			.pw("pw")
 			.name("name")
 			.phone("phone")
@@ -57,7 +57,7 @@ class BookingService01ApplicationTests {
 		/*when */
 		final Admin admin = BookingMapper.INSTANCE.adminDto_To_Entity(adminDTO);
 		/*then*/
-		assertEquals(1, admin.getAno());
+		assertEquals("id", admin.getAid());
         assertEquals("pw", admin.getPw());
         assertEquals("name", admin.getName());
         assertEquals("phone", admin.getPhone());
@@ -69,17 +69,17 @@ class BookingService01ApplicationTests {
 	void Managertest() {
 		final ManageDTO manageDTO = ManageDTO.builder()
 			.fno(1)
-			.ano(1)
+			.aid("id")
 			.mno(1)
 			.build();
 		final Manage manage = BookingMapper.INSTANCE.manageDTO_To_Entity(manageDTO);
 		log.info(manage.toString());
 
 		assertEquals(1, manage.getFacility().getFno());
-		assertEquals(1, manage.getAdmin().getAno());
+		assertEquals("id", manage.getAdmin().getAid());
 		assertEquals(1, manage.getMno());
 
-		System.out.println(manage.getAdmin().getAno());
+		System.out.println(manage.getAdmin().getAid());
         System.out.println("DTO To Entity all pass");
 	}
 

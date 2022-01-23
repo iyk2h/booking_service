@@ -6,12 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AdminRepository extends JpaRepository<Admin, Integer>{
-    Admin findByAno(Integer ano);
+public interface AdminRepository extends JpaRepository<Admin, String>{
+    Admin findByAid(String aid);
 
     // @Modifying
     // @Transactional
-    // @Query("delete from admin_models a where a.ano in :ano")
-    // void deleteByAno(@Param("ano") Integer ano);
+    // @Query("delete from admin_models a where a.aid in :aid")
+    // void deleteByAid(@Param("aid") Integer aid);
     // Admin delete()
 }

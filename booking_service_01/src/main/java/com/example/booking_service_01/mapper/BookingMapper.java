@@ -36,13 +36,14 @@ public interface BookingMapper {
     List<FacilityDTO> facility_To_List_DTO(List<Facility> facilities);
     Facility facilityDTO_To_Entity(FacilityDTO facilityDTO);
 
-    @Mapping(target = "ano", source = "admin.ano")
+    @Mapping(target = "aid", source = "admin.aid")
     @Mapping(target = "fno", source = "facility.fno")
     ManageDTO manage_To_DTO(Manage manage);
-    @Mapping(target = "admin.ano", source = "ano")
+    @Mapping(target = "admin.aid", source = "aid")
     @Mapping(target = "facility.fno", source = "fno")
     Manage manageDTO_To_Entity(ManageDTO manageDTO);
     
     StudentsDTO students_To_DTO(Students students);
     Students studentsDTO_To_Entity(StudentsDTO studentsDTO);
+    List<StudentsDTO> students_To_List_DTO(List<Students> students);
 }
