@@ -1,6 +1,5 @@
 package com.example.booking_service_01.controller;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.servlet.http.HttpServletRequest;

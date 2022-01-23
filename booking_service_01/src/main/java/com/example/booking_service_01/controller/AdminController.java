@@ -8,7 +8,9 @@ import javax.servlet.http.HttpSession;
 
 import com.example.booking_service_01.dto.AdminDTO;
 import com.example.booking_service_01.dto.JwtAdminDTO;
+import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.service.AdminService;
+import com.example.booking_service_01.service.StudentsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,92 +29,85 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
     @Autowired
     AdminService adminService;
-    // @Autowired
-    // AdminRepository adminRepository;
+    @Autowired
+    StudentsService studentsService;
     
     //Insert
     @PostMapping(path = "/join", produces = "application/json")
     public ResponseEntity<?> insertAdmin(@RequestBody AdminDTO adminDTO) {
-        if(adminDTO.getAno()!=null) {
-            if (adminService.checkAno(adminDTO.getAno()))
+        if(adminDTO.getAid()!=null) {
+            if (adminService.checkAid(adminDTO.getAid()))
                 return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
-            return new ResponseEntity<>(adminService.findByAno(adminService.insertAdminDto(adminDTO)), HttpStatus.CREATED);
+            return new ResponseEntity<>(adminService.findByAid(adminService.insertAdminDto(adminDTO)), HttpStatus.CREATED);
         }
         else{
             return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
         }
     }
 
-    //Select by ano
-    @GetMapping(path="/{ano}", produces = "application/json")
-    public ResponseEntity<?> getAno(@PathVariable("ano") Integer ano) {
-        if(!adminService.checkAno(ano)) {
-            return new ResponseEntity<>("ano can not found", HttpStatus.NOT_ACCEPTABLE);
+    //Select by aid
+    @GetMapping(path="/{aid}", produces = "application/json")
+    public ResponseEntity<?> getAid(@PathVariable("aid") String aid) {
+        if(!adminService.checkAid(aid)) {
+            return new ResponseEntity<>("aid can not found", HttpStatus.NOT_ACCEPTABLE);
         }
         else {
-            AdminDTO adminDTO = adminService.findByAno(ano);
+            AdminDTO adminDTO = adminService.findByAid(aid);
             return new ResponseEntity<>(adminDTO, HttpStatus.OK);
         }
     }
 
     //Update   
-    @PutMapping(path = "/{ano}", produces = "application/json")
-    public ResponseEntity<?> updateAdmin(@PathVariable("ano") Integer ano, @RequestBody AdminDTO adminDTO) {
-        AdminDTO beforeDTO = adminService.findByAno(ano);
+    @PutMapping(path = "/{aid}", produces = "application/json")
+    public ResponseEntity<?> updateAdmin(@PathVariable("aid") String aid, @RequestBody AdminDTO adminDTO) {
+        AdminDTO beforeDTO = adminService.findByAid(aid);
         if(adminDTO != null){
-            Integer u_ano = adminDTO.getAno()!=null?ano:beforeDTO.getAno();
+            String u_aid = adminDTO.getAid()!=null?aid:beforeDTO.getAid();
             String u_pw = adminDTO.getPw()!=null?adminDTO.getPw():beforeDTO.getPw();
             String u_phone = adminDTO.getPhone()!=null?adminDTO.getPhone():beforeDTO.getPhone();
             String u_name = adminDTO.getName()!=null?adminDTO.getName():beforeDTO.getName();
             String u_email = adminDTO.getEmail()!=null?adminDTO.getEmail():beforeDTO.getEmail();
 
             AdminDTO updateDTO= AdminDTO.builder()
-                .ano(u_ano)
+                .aid(u_aid)
                 .pw(u_pw)
                 .phone(u_phone)
                 .name(u_name)
                 .email(u_email)
                 .build();
             
-            return new ResponseEntity<>(adminService.findByAno(adminService.update(updateDTO)), HttpStatus.OK);
+            return new ResponseEntity<>(adminService.findByAid(adminService.update(updateDTO)), HttpStatus.OK);
         }
         else
             return new ResponseEntity<>("Update fail", HttpStatus.NOT_ACCEPTABLE);
     }
 
     //Delete
-    @DeleteMapping(path="/{ano}", produces = "application/json")
-    public ResponseEntity<?> deleteAdmin(@PathVariable("ano") Integer ano) {
-        if(!adminService.checkAno(ano))
+    @DeleteMapping(path="/{aid}", produces = "application/json")
+    public ResponseEntity<?> deleteAdmin(@PathVariable("aid") String aid, HttpServletRequest request) {
+
+        if(!adminService.checkAid(aid))
             return new ResponseEntity<>("Admin ID can not found", HttpStatus.NOT_ACCEPTABLE);
         else {
-            AdminDTO admindDto = adminService.findByAno(ano);
+            AdminDTO admindDto = adminService.findByAid(aid);
             adminService.delete(admindDto);
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
     }
 
-    //Login
-    // @GetMapping(path = "/login", produces = "application/json")
-    // public String loginForm(@ModelAttribute JwtAdminDTO loginDTO) {
-    //     return "admin/login/loginForm";
-    // }
-
+    // login 로그인
     @PostMapping(path = "/login", produces = "application/json")
     public ResponseEntity<?> loginAdmin(@RequestBody JwtAdminDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
-        if(!adminService.checkAno(loginDTO.getAno())) {
-            return new ResponseEntity<>("ano can not found", HttpStatus.NOT_ACCEPTABLE);
+        if(!adminService.checkAid(loginDTO.getAid())) {
+            return new ResponseEntity<>("aid can not found", HttpStatus.NOT_ACCEPTABLE);
         }
         else
-            if(adminService.admin_login(loginDTO.getAno(), loginDTO.getPw()) == true){
+            if(adminService.admin_login(loginDTO.getAid(), loginDTO.getPw()) == true){
                 HttpSession session = request.getSession();
-                session.setAttribute("id", loginDTO.getAno());
+                session.setAttribute("id", loginDTO.getAid());
                 session.setAttribute("role", "admin");
 
-                URI redirectUrl = new URI("/admin");
-                org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
-                httpHeaders.setLocation(redirectUrl);
-            return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);
+            return new ResponseEntity<>("성공 ",HttpStatus.OK);
             }
             else {
                 return new ResponseEntity<>("login fail", HttpStatus.NOT_ACCEPTABLE);
@@ -129,5 +124,23 @@ public class AdminController {
         org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
         httpHeaders.setLocation(redirectUrl);
         return new ResponseEntity<>(httpHeaders ,HttpStatus.OK);
+    }
+
+    // //사용자 list
+    @GetMapping(path="/students", produces = "application/json")
+    public ResponseEntity<?> getSid(){
+        return new ResponseEntity<>(studentsService.findAll(), HttpStatus.OK);
+    }
+    //Select  
+    @GetMapping(path="/students/{sid}", produces = "application/json")
+    public ResponseEntity<?> getSid(@PathVariable("sid") Integer sid, HttpServletRequest request) {
+        //admin
+        if(!studentsService.checkSid(sid)) {
+            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else {
+            StudentsDTO studentsDTO = studentsService.findBySid(sid);
+            return new ResponseEntity<>(studentsDTO, HttpStatus.OK);
+        }
     }
 }
