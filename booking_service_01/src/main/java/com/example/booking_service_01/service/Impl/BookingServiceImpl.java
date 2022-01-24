@@ -28,6 +28,13 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     StudentsRepository studentsRepository;
 
+
+    @Override
+    public List<BookingDTO> findAll() {
+        List<Booking> bookings = bookingRepository.findAll();
+        List<BookingDTO> bookingDTO = BookingMapper.INSTANCE.booking_To_List_DTO(bookings);
+        return bookingDTO;
+    }
     @Override
     public BookingDTO findByBno(Integer bno) {
         Booking booking = bookingRepository.findByBno(bno);
