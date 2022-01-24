@@ -162,7 +162,7 @@ public class AdminController {
         if(adminService.checkAdminRole(request) == null){
             return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
         }
-        return new ResponseEntity<>(bookingService.findall)
+        return new ResponseEntity<>(bookingService.findAll(),HttpStatus.OK);
     }
 
     //Select 
