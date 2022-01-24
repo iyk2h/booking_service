@@ -10,6 +10,7 @@ import com.example.booking_service_01.dto.AdminDTO;
 import com.example.booking_service_01.dto.JwtAdminDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.service.AdminService;
+import com.example.booking_service_01.service.BookingService;
 import com.example.booking_service_01.service.FacilityService;
 import com.example.booking_service_01.service.StudentsService;
 
@@ -34,6 +35,8 @@ public class AdminController {
     StudentsService studentsService;
     @Autowired
     FacilityService facilityService;
+    @Autowired
+    BookingService bookingService;
     
     //Insert
     @PostMapping(path = "", produces = "application/json")
@@ -139,7 +142,7 @@ public class AdminController {
 
     //사용자 list
     @GetMapping(path="/students", produces = "application/json")
-    public ResponseEntity<?> getStudents(HttpServletRequest request){
+    public ResponseEntity<?> getStudentsList(HttpServletRequest request){
         if(adminService.checkAdminRole(request) == null){
             return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
         }
@@ -147,11 +150,19 @@ public class AdminController {
     }
     // 시설 리스트
     @GetMapping(path = "/facility", produces = "application/json")
-    public ResponseEntity<?> getFacility(HttpServletRequest request) {
+    public ResponseEntity<?> getFacilityList(HttpServletRequest request) {
         if(adminService.checkAdminRole(request) == null){
             return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
         } 
         return new ResponseEntity<>(facilityService.findAll(), HttpStatus.OK);
+    }
+    //bookinglist
+    @GetMapping(path = "/booking", produces = "application/json")
+    public ResponseEntity<?> getBookingList(HttpServletRequest request) {
+        if(adminService.checkAdminRole(request) == null){
+            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        }
+        return new ResponseEntity<>(bookingService.findall)
     }
 
     //Select 
