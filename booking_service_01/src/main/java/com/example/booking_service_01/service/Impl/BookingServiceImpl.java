@@ -57,6 +57,15 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public boolean checkByBno(Integer bno) {
+        Booking booking = bookingRepository.findByBno(bno);
+        if(booking == null) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public List<BookingDTO> findByFno(Integer fno) {
         Facility facility = facilityRepository.findByFno(fno);
         List<BookingDTO> dtos = new ArrayList<>();

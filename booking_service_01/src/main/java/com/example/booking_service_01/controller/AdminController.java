@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.example.booking_service_01.dto.AdminDTO;
+import com.example.booking_service_01.dto.BookingDTO;
+import com.example.booking_service_01.dto.FacilityDTO;
 import com.example.booking_service_01.dto.JwtAdminDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.service.AdminService;
@@ -148,26 +150,9 @@ public class AdminController {
         }
         return new ResponseEntity<>(studentsService.findAll(), HttpStatus.OK);
     }
-    // 시설 리스트
-    @GetMapping(path = "/facility", produces = "application/json")
-    public ResponseEntity<?> getFacilityList(HttpServletRequest request) {
-        if(adminService.checkAdminRole(request) == null){
-            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
-        } 
-        return new ResponseEntity<>(facilityService.findAll(), HttpStatus.OK);
-    }
-    //bookinglist
-    @GetMapping(path = "/booking", produces = "application/json")
-    public ResponseEntity<?> getBookingList(HttpServletRequest request) {
-        if(adminService.checkAdminRole(request) == null){
-            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
-        }
-        return new ResponseEntity<>(bookingService.findAll(),HttpStatus.OK);
-    }
-
-    //Select 
+    //Select Student
     @GetMapping(path="/students/{sid}", produces = "application/json")
-    public ResponseEntity<?> getSid(@PathVariable("sid") Integer sid, HttpServletRequest request) {
+    public ResponseEntity<?> getStudentBySid(@PathVariable("sid") Integer sid, HttpServletRequest request) {
         if(adminService.checkAdminRole(request) == null){
             return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
         }
@@ -177,6 +162,49 @@ public class AdminController {
         else {
             StudentsDTO studentsDTO = studentsService.findBySid(sid);
             return new ResponseEntity<>(studentsDTO, HttpStatus.OK);
+        }
+    }
+    // 시설 리스트
+    @GetMapping(path = "/facility", produces = "application/json")
+    public ResponseEntity<?> getFacilityList(HttpServletRequest request) {
+        if(adminService.checkAdminRole(request) == null){
+            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        } 
+        return new ResponseEntity<>(facilityService.findAll(), HttpStatus.OK);
+    }
+    // getFacilityByFno
+    @GetMapping(path = "/facility/{fno}", produces = "application/json")
+    public ResponseEntity<?> getFacilityByFno(@PathVariable("fno") Integer fno ,HttpServletRequest request) {
+        if(adminService.checkAdminRole(request) == null){
+            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        }
+        if(!facilityService.checkFno(fno)) {
+            return new ResponseEntity<>("fno can not found", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else {
+            FacilityDTO facilityDTO = facilityService.findByFno(fno);
+            return new ResponseEntity<>(facilityDTO,HttpStatus.OK);
+        }
+    }
+    //bookinglist
+    @GetMapping(path = "/booking", produces = "application/json")
+    public ResponseEntity<?> getBookingList(HttpServletRequest request) {
+        if(adminService.checkAdminRole(request) == null){
+            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        }
+        return new ResponseEntity<>(bookingService.findAll(),HttpStatus.OK);
+    }
+    @GetMapping(path = "/booking/{bno}", produces = "application/json")
+    public ResponseEntity<?> getBookingByBno(@PathVariable("bno") Integer bno ,HttpServletRequest request) { 
+        if(adminService.checkAdminRole(request) == null){
+            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        }
+        if(!bookingService.checkByBno(bno)) {
+            return new ResponseEntity<>("bno can not found", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else {
+            BookingDTO bookingDTO = bookingService.findByBno(bno);
+            return new ResponseEntity<>(bookingDTO, HttpStatus.OK);   
         }
     }
 }
