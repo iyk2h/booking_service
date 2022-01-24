@@ -17,7 +17,7 @@ Content-Type: application/json
 
 - #### response
 ```http
-State : 200 
+State : 201 
 Content-Type: application/json
 
 성공
