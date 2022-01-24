@@ -139,7 +139,7 @@ public class AdminController {
         if(session != null){
             session.invalidate();
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     //사용자 list

@@ -1,6 +1,5 @@
 package com.example.booking_service_01.controller;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -108,9 +107,6 @@ public class StudentsController {
                 session.setAttribute("id", loginDTO.getSid());
                 session.setAttribute("role", "student");
 
-                // URI redirectUrl = new URI("http://localhost:3000/");
-                // org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
-                // httpHeaders.setLocation(redirectUrl);
             return new ResponseEntity<>("성공",HttpStatus.CREATED);
             }
             else {
