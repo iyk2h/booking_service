@@ -67,16 +67,19 @@ public class BookingController {
             LocalDateTime start = LocalDateTime.of(bookingDTO.getDate(), bookingDTO.getSelectedTime());
             LocalDateTime end  = start.plusHours(seletedHour).minusSeconds(1);
             if(bookingService.checkBookingTime(fno, start, end)) {
+                for( Integer i = 0; i <bookingDTO.getMaxHour(); i++) {
                 BookingDTO newBookingDTO = BookingDTO.builder()
                     .bno(bookingDTO.getBno())
                     .sid(sid)
                     .fno(fno)
-                    .startTime(start)
-                    .endTime(end)
+                    .startTime(start.plusHours(i))
+                    .endTime(start.plusHours(i+1).minusSeconds(1))
                     .maxHour(bookingDTO.getMaxHour())
                     .build();
-                BookingDTO saveDto = bookingService.insertBookingDto(newBookingDTO);
-            return new ResponseEntity<>(saveDto, HttpStatus.CREATED);
+                    
+                    bookingService.insertBookingDto(newBookingDTO);
+                }
+                return new ResponseEntity<>(bookingDTO, HttpStatus.CREATED);
             }
             else
                 return new ResponseEntity<>("예약 시간을 확인해 주세요.", HttpStatus.NOT_FOUND);  
