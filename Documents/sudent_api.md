@@ -10,12 +10,28 @@ Content-Type: application/json
 }
 ```
 - #### response
-```html
- State : 200 
+```http
+State : 200 
 Content-Type: application/json
 
 성공
 ```
+
+ID 없을시
+
+``` http
+state : 401
+sid can not found
+```
+
+PW 실패시
+
+``` http
+state : 404
+login fail
+```
+
+
 
 ### logout
 
