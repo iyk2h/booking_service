@@ -10,6 +10,7 @@ import com.example.booking_service_01.dto.AdminDTO;
 import com.example.booking_service_01.dto.JwtAdminDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.service.AdminService;
+import com.example.booking_service_01.service.FacilityService;
 import com.example.booking_service_01.service.StudentsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class AdminController {
     AdminService adminService;
     @Autowired
     StudentsService studentsService;
+    @Autowired
+    FacilityService facilityService;
     
     //Insert
     @PostMapping(path = "", produces = "application/json")
@@ -136,14 +139,21 @@ public class AdminController {
 
     //사용자 list
     @GetMapping(path="/students", produces = "application/json")
-    public ResponseEntity<?> getSid(HttpServletRequest request){
+    public ResponseEntity<?> getStudents(HttpServletRequest request){
         if(adminService.checkAdminRole(request) == null){
             return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
         }
         return new ResponseEntity<>(studentsService.findAll(), HttpStatus.OK);
     }
     // 시설 리스트
-    
+    @GetMapping(path = "/facility", produces = "application/json")
+    public ResponseEntity<?> getFacility(HttpServletRequest request) {
+        if(adminService.checkAdminRole(request) == null){
+            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
+        } 
+        return new ResponseEntity<>(facilityService.findAll(), HttpStatus.OK);
+    }
+
     //Select 
     @GetMapping(path="/students/{sid}", produces = "application/json")
     public ResponseEntity<?> getSid(@PathVariable("sid") Integer sid, HttpServletRequest request) {
