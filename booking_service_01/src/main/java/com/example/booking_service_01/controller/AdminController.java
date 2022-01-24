@@ -142,6 +142,8 @@ public class AdminController {
         }
         return new ResponseEntity<>(studentsService.findAll(), HttpStatus.OK);
     }
+    // 시설 리스트
+    
     //Select 
     @GetMapping(path="/students/{sid}", produces = "application/json")
     public ResponseEntity<?> getSid(@PathVariable("sid") Integer sid, HttpServletRequest request) {
