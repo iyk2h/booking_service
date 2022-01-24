@@ -112,14 +112,12 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> entitys  = bookingRepository.findAllByFacility(facility, start, end);
 
         List<BookingDTO> dtos = BookingMapper.INSTANCE.booking_To_List_DTO(entitys);
-        
         return dtos;
     }
 
     @Override
     public boolean checkBookingTime(Integer fno, LocalDateTime start, LocalDateTime end) {
         Facility facility = facilityRepository.findByFno(fno);
-        end.plusSeconds(1);
         if (bookingRepository.findAllByFacility(facility, start, end).size() == 0)
             return true;
         else

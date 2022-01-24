@@ -1,5 +1,6 @@
 package com.example.booking_service_01.controller;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -97,7 +98,7 @@ public class StudentsController {
 
     //LoginStudent
     @PostMapping(path = "/login", produces = "application/json")
-    public ResponseEntity<?> loginStudent(@RequestBody JwtStudentsDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
+    public ResponseEntity<?> loginStudent(@RequestBody JwtStudentsDTO loginDTO, HttpServletRequest request) {
         if(!studentsService.checkSid(loginDTO.getSid())) {
             return new ResponseEntity<>("sid can not found", HttpStatus.UNAUTHORIZED);
         }
@@ -107,10 +108,10 @@ public class StudentsController {
                 session.setAttribute("id", loginDTO.getSid());
                 session.setAttribute("role", "student");
 
-                // URI redirectUrl = new URI("/booking");
+                // URI redirectUrl = new URI("http://localhost:3000/");
                 // org.springframework.http.HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
                 // httpHeaders.setLocation(redirectUrl);
-            return new ResponseEntity<>("성공", HttpStatus.CREATED);
+            return new ResponseEntity<>("성공",HttpStatus.CREATED);
             }
             else {
                 return new ResponseEntity<>("login fail", HttpStatus.NOT_FOUND);

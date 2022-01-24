@@ -44,4 +44,6 @@ public class Booking {
     @Column(name="end_time", nullable = false)
     private LocalDateTime endTime;
 
+    @Column(name="max_hour", nullable = false)
+    private Integer maxHour;
 }

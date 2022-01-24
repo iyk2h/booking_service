@@ -73,8 +73,8 @@ public class BookingController {
                     .fno(fno)
                     .startTime(start)
                     .endTime(end)
+                    .maxHour(bookingDTO.getMaxHour())
                     .build();
-
                 BookingDTO saveDto = bookingService.insertBookingDto(newBookingDTO);
             return new ResponseEntity<>(saveDto, HttpStatus.CREATED);
             }
@@ -105,7 +105,7 @@ public class BookingController {
             return new ResponseEntity<>("예약 날짜를 확인해 주세요.", HttpStatus.NO_CONTENT);
         }
         else {
-        return new ResponseEntity<>(bookingDTOs, HttpStatus.CREATED);
+            return new ResponseEntity<>(bookingDTOs, HttpStatus.CREATED);
         }
     }
 
