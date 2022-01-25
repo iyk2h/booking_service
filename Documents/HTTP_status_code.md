@@ -1,18 +1,18 @@
 ## 목차
 ### [2XX](#2XX)
-#### [200 OK](#200_OK)
+#### [200 OK](#200-OK)
 
 #### [201 Created](#201-Created)
 
-#### [204 No Content](#204_No_Content)
+#### [204 No Content](#204-No-Content)
 
 ### [4XX](#4XX)
 
-#### [400 Bad Request](#400_Bad_Request)
+#### [400 Bad Request](#400-Bad-Request)
 
-#### [401 Unauthorized](#401_Unauthorized)
-#### [403 Forbidden](#403_Forbidden)
-#### [404 Not Found](#404_Not_Found#)
+#### [401 Unauthorized](#401-Unauthorized)
+#### [403 Forbidden](#403-Forbidden)
+#### [404 Not Found](#404-Not-Found#)
 
 
 ---
