@@ -8,7 +8,7 @@
 
 ### [4XX](#4XX)
 
-#### [400 Bad Request](#400 Bad Request)
+#### [400 Bad Request](#400_Bad_Request)
 
 #### [401 Unauthorized](#401_Unauthorized)
 #### [403 Forbidden](#403_Forbidden)
