@@ -14,6 +14,7 @@ RESTApi 형식으로 구현
 Representational State Transfer의 약자로 원(resource)의 표현(representation)에 의한 상태(정보)를 주고받을 것
 HTTP 프로토콜을 그대로 활용해 웹의 장점을 최대한 활용할 수 있는 아키텍처 스타일로 구현할 것
 네트워크 상에서 Client와 Server 사이의 통신 방식을 익힐 것
+stateless 일것
 
 
 
