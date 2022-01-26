@@ -3,7 +3,7 @@ package com.example.booking_service_01.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.example.booking_service_01.dto.JwtStudentsDTO;
+import com.example.booking_service_01.dto.LoginDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.service.BookingService;
 import com.example.booking_service_01.service.StudentsService;
@@ -89,14 +89,14 @@ public class StudentsController {
 
     //Login
     @PostMapping(path = "/login", produces = "application/json")
-    public ResponseEntity<?> loginStudent(@RequestBody JwtStudentsDTO loginDTO, HttpServletRequest request) {
-        if(!studentsService.checkSid(loginDTO.getSid())) {
+    public ResponseEntity<?> loginStudent(@RequestBody LoginDTO loginDTO, HttpServletRequest request) {
+        if(!studentsService.checkSid(loginDTO.getId())) {
             return new ResponseEntity<>("sid can not found", HttpStatus.NOT_FOUND);
         }
         else {
-            if(studentsService.students_login(loginDTO.getSid(), loginDTO.getPw())){
+            if(studentsService.students_login(loginDTO.getId(), loginDTO.getPw())){
                 HttpSession session = request.getSession();
-                session.setAttribute("id", loginDTO.getSid());
+                session.setAttribute("id", loginDTO.getId());
                 session.setAttribute("role", "student");
             return new ResponseEntity<>("성공",HttpStatus.CREATED);
             }
