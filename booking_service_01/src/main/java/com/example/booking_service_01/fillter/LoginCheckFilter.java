@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LoginCheckFilter implements Filter{
+    //예외
     private static final String[] whitelist = {"/", "*/login", "*/logout","*/singup","*/date","/css/*"};
     
     @Override
@@ -29,7 +30,6 @@ public class LoginCheckFilter implements Filter{
             if (isLoginCheckPath(requestURI)) {
                 HttpSession session = httpRequest.getSession(false);
                 if (session == null || session.getAttribute("id") == null) {
-                            log.info("미인증 사용자 요청 {}", requestURI);
                     httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                     return ; //여기가 중요, 미인증 사용자는 다음으로 진행하지 않고 끝!
                }
@@ -38,13 +38,9 @@ public class LoginCheckFilter implements Filter{
         } catch (Exception e) {
                 throw e; //예외 로깅 가능 하지만, 톰캣까지 예외를 보내주어야 함
         } finally {
-            log.info("인증 체크 필터 종료 {}", requestURI);
         }
     }
 
-    /**
-    * 화이트 리스트의 경우 인증 체크X
-    */
     private boolean isLoginCheckPath(String requestURI) {
         return !PatternMatchUtils.simpleMatch(whitelist, requestURI);
     }
