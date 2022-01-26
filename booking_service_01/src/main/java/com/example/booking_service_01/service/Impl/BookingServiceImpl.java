@@ -97,11 +97,19 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public boolean checkByBnoSid(Integer sid, Integer bno) {
         Students students = studentsRepository.findBySid(sid);
-        if(bookingRepository.findBySidBno(students, bno).size()==0){
+        if(bookingRepository.findBySidBno(students, bno) == null){
             return false;
         }
         else
             return true;
+    }
+
+    @Override
+    public BookingDTO findByBnoSid(Integer sid, Integer bno) {
+        Students students = studentsRepository.findBySid(sid);
+        Booking bookings = bookingRepository.findBySidBno(students, bno);
+        BookingDTO dtos = BookingMapper.INSTANCE.booking_To_DTO(bookings);
+        return dtos;
     }
 
     @Override

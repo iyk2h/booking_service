@@ -26,5 +26,5 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
     @Query(value = "select b from Booking AS b where b.facility= ?1 and b.startTime between ?2 and ?3 order by b.startTime")
     List<Booking> findAllByFacility(Facility facility, LocalDateTime startTime, LocalDateTime endTime);
     @Query(value = "select b from Booking AS b where b.students= ?1 and b.bno= ?2")
-    List<Booking> findBySidBno(Students students, Integer bno);
+    Booking findBySidBno(Students students, Integer bno);
 }

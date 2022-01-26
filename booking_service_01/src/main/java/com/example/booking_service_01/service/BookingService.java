@@ -15,6 +15,7 @@ public interface BookingService {
     List<BookingDTO> findByFno(Integer fno);
     List<BookingDTO> findBySid(Integer sid);
     boolean checkByBnoSid(Integer sid, Integer bno);
+    BookingDTO findByBnoSid(Integer sid, Integer bno);
     List<BookingDTO> findBookingListByDate(LocalDate date);
     List<BookingDTO> findBookingListByFacilityWhitDate(Integer fno, LocalDate date);
     void deleteBooking (Integer bno);
