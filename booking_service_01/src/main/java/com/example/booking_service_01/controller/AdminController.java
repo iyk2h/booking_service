@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import com.example.booking_service_01.dto.AdminDTO;
 import com.example.booking_service_01.dto.BookingDTO;
 import com.example.booking_service_01.dto.FacilityDTO;
-import com.example.booking_service_01.dto.JwtAdminDTO;
+import com.example.booking_service_01.dto.LoginAdminDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.service.AdminService;
 import com.example.booking_service_01.service.BookingService;
@@ -107,7 +107,7 @@ public class AdminController {
 
     // login 로그인
     @PostMapping(path = "/login", produces = "application/json")
-    public ResponseEntity<?> loginAdmin(@RequestBody JwtAdminDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
+    public ResponseEntity<?> loginAdmin(@RequestBody LoginAdminDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
         if(!adminService.checkAid(loginDTO.getAid())) {
             return new ResponseEntity<>("aid can not found", HttpStatus.NOT_FOUND);
         }
