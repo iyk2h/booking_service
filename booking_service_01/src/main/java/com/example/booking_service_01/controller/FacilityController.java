@@ -1,7 +1,5 @@
 package com.example.booking_service_01.controller;
 
-import java.util.List;
-
 import com.example.booking_service_01.dto.FacilityDTO;
 import com.example.booking_service_01.service.FacilityService;
 
@@ -30,15 +28,21 @@ public class FacilityController {
             return new ResponseEntity<>(facilityService.findByFno(facilityService.insertFacilityDto(facilityDTO)), HttpStatus.CREATED);
         }
         else{
-            return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+            return new ResponseEntity<>("잘못 입력되었습니다.",HttpStatus.NOT_FOUND);
         }
+    }
+
+    //select all
+    @GetMapping(path="", produces = "application/json")
+    public ResponseEntity<?> getAllFacility() {
+        return new ResponseEntity<>(facilityService.findAll(), HttpStatus.OK);
     }
 
     //Select by fno
     @GetMapping(path="/{fno}", produces = "application/json")
-    public ResponseEntity<?> getFno(@PathVariable("fno") Integer fno) {
+    public ResponseEntity<?> getByFno(@PathVariable("fno") Integer fno) {
         if(!facilityService.checkFno(fno)) {
-            return new ResponseEntity<>("fno can not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("fno can not found", HttpStatus.NOT_FOUND);
         }
         else {
             FacilityDTO facilityDTO = facilityService.findByFno(fno);
@@ -46,15 +50,8 @@ public class FacilityController {
         }
     }
 
-    //select all
-    @GetMapping(path="", produces = "application/json")
-    public ResponseEntity<?> getAllFacility() {
-        List<FacilityDTO> dtos = facilityService.findAll();
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
-    }
-    
     //Update   
-    @PutMapping(path = "/{fno}/", produces = "application/json")
+    @PutMapping(path = "/{fno}", produces = "application/json")
     public ResponseEntity<?> updateFacility(@PathVariable("fno") Integer fno, @RequestBody FacilityDTO facilityDTO) {
         FacilityDTO beforeDTO = facilityService.findByFno(fno);
         if(facilityDTO != null){
@@ -72,21 +69,21 @@ public class FacilityController {
                 .maxHour(u_maxHour)
                 .build();
             
-            return new ResponseEntity<>(facilityService.findByFno(facilityService.update(updateDTO)), HttpStatus.OK);
+            return new ResponseEntity<>(facilityService.findByFno(facilityService.update(updateDTO)), HttpStatus.CREATED);
         }
         else
-            return new ResponseEntity<>("Update fail", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Update fail", HttpStatus.BAD_REQUEST);
     }
 
     //Delete
     @DeleteMapping(path="/{fno}", produces = "application/json")
     public ResponseEntity<?> deleteFacility(@PathVariable("fno") Integer fno) {
         if(!facilityService.checkFno(fno))
-            return new ResponseEntity<>("Facility Number can not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Facility Number can not found", HttpStatus.NOT_FOUND);
         else {
             FacilityDTO facilityDTO = facilityService.findByFno(fno);
             facilityService.delete(facilityDTO);
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
         }
     }
 }

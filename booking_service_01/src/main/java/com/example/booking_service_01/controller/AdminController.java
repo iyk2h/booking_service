@@ -40,16 +40,16 @@ public class AdminController {
     @Autowired
     BookingService bookingService;
     
-    //Insert
-    @PostMapping(path = "", produces = "application/json")
-    public ResponseEntity<?> insertAdmin(@RequestBody AdminDTO adminDTO) {
+    //singup
+    @PostMapping(path = "/singup", produces = "application/json")
+    public ResponseEntity<?> singupAdmin(@RequestBody AdminDTO adminDTO) {
         if(adminDTO.getAid()!=null) {
             if (adminService.checkAid(adminDTO.getAid()))
-                return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(adminService.findByAid(adminService.insertAdminDto(adminDTO)), HttpStatus.CREATED);
         }
         else{
-            return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -57,11 +57,8 @@ public class AdminController {
     @GetMapping(path="", produces = "application/json")
     public ResponseEntity<?> getAid(HttpServletRequest request) {
         String aid = adminService.checkAdminRole(request);
-        if(aid == null){
-            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
-        }
         if(!adminService.checkAid(aid)) {
-            return new ResponseEntity<>("aid can not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("aid can not found", HttpStatus.NOT_FOUND);
         }
         else {
             AdminDTO adminDTO = adminService.findByAid(aid);
@@ -73,9 +70,6 @@ public class AdminController {
     @PutMapping(path = "", produces = "application/json")
     public ResponseEntity<?> updateAdmin(@RequestBody AdminDTO adminDTO, HttpServletRequest request) {
         String aid = adminService.checkAdminRole(request);
-        if(aid == null){
-            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
-        }
         AdminDTO beforeDTO = adminService.findByAid(aid);
         if(adminDTO != null){
             String u_aid = adminDTO.getAid()!=null?aid:beforeDTO.getAid();
@@ -92,25 +86,22 @@ public class AdminController {
                 .email(u_email)
                 .build();
             
-            return new ResponseEntity<>(adminService.findByAid(adminService.update(updateDTO)), HttpStatus.OK);
+            return new ResponseEntity<>(adminService.findByAid(adminService.update(updateDTO)), HttpStatus.CREATED);
         }
         else
-            return new ResponseEntity<>("Update fail", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Update fail", HttpStatus.BAD_REQUEST);
     }
 
     //Delete
     @DeleteMapping(path="", produces = "application/json")
     public ResponseEntity<?> deleteAdmin(HttpServletRequest request) {
         String aid = adminService.checkAdminRole(request);
-        if(aid == null){
-            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
-        }
         if(!adminService.checkAid(aid))
-            return new ResponseEntity<>("Admin ID can not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Admin ID can not found", HttpStatus.NOT_FOUND);
         else {
             AdminDTO admindDto = adminService.findByAid(aid);
             adminService.delete(admindDto);
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
         }
     }
 
@@ -118,7 +109,7 @@ public class AdminController {
     @PostMapping(path = "/login", produces = "application/json")
     public ResponseEntity<?> loginAdmin(@RequestBody JwtAdminDTO loginDTO, HttpServletRequest request) throws URISyntaxException {
         if(!adminService.checkAid(loginDTO.getAid())) {
-            return new ResponseEntity<>("aid can not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("aid can not found", HttpStatus.NOT_FOUND);
         }
         else
             if(adminService.admin_login(loginDTO.getAid(), loginDTO.getPw()) == true){
@@ -126,85 +117,73 @@ public class AdminController {
                 session.setAttribute("id", loginDTO.getAid());
                 session.setAttribute("role", "admin");
 
-            return new ResponseEntity<>("성공 ",HttpStatus.OK);
+            return new ResponseEntity<>("성공 ",HttpStatus.CREATED);
             }
             else {
-                return new ResponseEntity<>("login fail", HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>("login fail", HttpStatus.NOT_FOUND);
             }
     }  
     //logout
     @PostMapping(path = "/logout", produces = "application/json")
     public ResponseEntity<?> logoutAdmin(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        if(session != null){
-            session.invalidate();
-        }
+        request.getSession().invalidate();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    //-------------- manage students -------------//
     //사용자 list
     @GetMapping(path="/students", produces = "application/json")
-    public ResponseEntity<?> getStudentsList(HttpServletRequest request){
-        if(adminService.checkAdminRole(request) == null){
-            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
-        }
+    public ResponseEntity<?> getStudentsList(){
         return new ResponseEntity<>(studentsService.findAll(), HttpStatus.OK);
     }
-    //Select Student
+    //회원 정보
     @GetMapping(path="/students/{sid}", produces = "application/json")
-    public ResponseEntity<?> getStudentBySid(@PathVariable("sid") Integer sid, HttpServletRequest request) {
-        if(adminService.checkAdminRole(request) == null){
-            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
-        }
+    public ResponseEntity<?> getStudentBySid(@PathVariable("sid") Integer sid) {
         if(!studentsService.checkSid(sid)) {
-            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_FOUND);
         }
         else {
-            StudentsDTO studentsDTO = studentsService.findBySid(sid);
-            return new ResponseEntity<>(studentsDTO, HttpStatus.OK);
+            return new ResponseEntity<>(studentsService.findBySid(sid), HttpStatus.OK);
         }
     }
-    // 시설 리스트
-    @GetMapping(path = "/facility", produces = "application/json")
-    public ResponseEntity<?> getFacilityList(HttpServletRequest request) {
-        if(adminService.checkAdminRole(request) == null){
-            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
-        } 
-        return new ResponseEntity<>(facilityService.findAll(), HttpStatus.OK);
-    }
-    // getFacilityByFno
-    @GetMapping(path = "/facility/{fno}", produces = "application/json")
-    public ResponseEntity<?> getFacilityByFno(@PathVariable("fno") Integer fno ,HttpServletRequest request) {
-        if(adminService.checkAdminRole(request) == null){
-            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
-        }
-        if(!facilityService.checkFno(fno)) {
-            return new ResponseEntity<>("fno can not found", HttpStatus.NOT_ACCEPTABLE);
-        }
+    //회원 탈퇴
+    @DeleteMapping(path="/students/{sid}", produces = "application/json")
+    public ResponseEntity<?> deleteStudent(@PathVariable("sid") Integer sid) {
+        if(!studentsService.checkSid(sid))
+            return new ResponseEntity<>("sid can not found", HttpStatus.NOT_FOUND);
         else {
-            FacilityDTO facilityDTO = facilityService.findByFno(fno);
-            return new ResponseEntity<>(facilityDTO,HttpStatus.OK);
+            studentsService.delete(studentsService.findBySid(sid));
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
         }
     }
+
+    //------------ manage booking --------------//
     //bookinglist
     @GetMapping(path = "/booking", produces = "application/json")
     public ResponseEntity<?> getBookingList(HttpServletRequest request) {
-        if(adminService.checkAdminRole(request) == null){
-            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
-        }
         return new ResponseEntity<>(bookingService.findAll(),HttpStatus.OK);
     }
+
+    //예약 정보
     @GetMapping(path = "/booking/{bno}", produces = "application/json")
-    public ResponseEntity<?> getBookingByBno(@PathVariable("bno") Integer bno ,HttpServletRequest request) { 
-        if(adminService.checkAdminRole(request) == null){
-            return new ResponseEntity<>("관리자 로그인 후 이용해 주세요.", HttpStatus.UNAUTHORIZED); 
-        }
+    public ResponseEntity<?> getBookingByBno(@PathVariable("bno") Integer bno ) { 
         if(!bookingService.checkByBno(bno)) {
-            return new ResponseEntity<>("bno can not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("bno can not found", HttpStatus.NOT_FOUND);
         }
         else {
             BookingDTO bookingDTO = bookingService.findByBno(bno);
             return new ResponseEntity<>(bookingDTO, HttpStatus.OK);   
+        }
+    }
+    // 예약 삭제
+    @DeleteMapping(path="booking/{bno}", produces = "application/json")
+    public ResponseEntity<?> deleteBookingByBno(@PathVariable("bno") Integer bno) {
+        if(!bookingService.checkByBno(bno)) {
+            return new ResponseEntity<>("bno can not found", HttpStatus.NOT_FOUND);
+        }
+        else {
+            bookingService.deleteBooking(bno);
+            return new ResponseEntity<>("삭제되었습니다.",HttpStatus.NO_CONTENT);
         }
     }
 }
