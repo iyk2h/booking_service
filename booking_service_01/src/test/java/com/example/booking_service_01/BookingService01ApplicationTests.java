@@ -3,9 +3,7 @@ package com.example.booking_service_01;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.booking_service_01.dto.AdminDTO;
-import com.example.booking_service_01.dto.ManageDTO;
 import com.example.booking_service_01.entity.Admin;
-import com.example.booking_service_01.entity.Manage;
 import com.example.booking_service_01.mapper.BookingMapper;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -64,24 +62,6 @@ class BookingService01ApplicationTests {
 		assertEquals("email", admin.getEmail());
         System.out.println("DTO To Entity all pass");
     }
-
-	@Test
-	void Managertest() {
-		final ManageDTO manageDTO = ManageDTO.builder()
-			.fno(1)
-			.aid("id")
-			.mno(1)
-			.build();
-		final Manage manage = BookingMapper.INSTANCE.manageDTO_To_Entity(manageDTO);
-		log.info(manage.toString());
-
-		assertEquals(1, manage.getFacility().getFno());
-		assertEquals("id", manage.getAdmin().getAid());
-		assertEquals(1, manage.getMno());
-
-		System.out.println(manage.getAdmin().getAid());
-        System.out.println("DTO To Entity all pass");
-	}
 
 }
 

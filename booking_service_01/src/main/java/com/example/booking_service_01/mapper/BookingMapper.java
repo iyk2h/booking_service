@@ -5,12 +5,10 @@ import java.util.List;
 import com.example.booking_service_01.dto.AdminDTO;
 import com.example.booking_service_01.dto.BookingDTO;
 import com.example.booking_service_01.dto.FacilityDTO;
-import com.example.booking_service_01.dto.ManageDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.entity.Admin;
 import com.example.booking_service_01.entity.Booking;
 import com.example.booking_service_01.entity.Facility;
-import com.example.booking_service_01.entity.Manage;
 import com.example.booking_service_01.entity.Students;
 
 import org.mapstruct.Mapper;
@@ -35,13 +33,6 @@ public interface BookingMapper {
     FacilityDTO facility_To_DTO(Facility facility);
     List<FacilityDTO> facility_To_List_DTO(List<Facility> facilities);
     Facility facilityDTO_To_Entity(FacilityDTO facilityDTO);
-
-    @Mapping(target = "aid", source = "admin.aid")
-    @Mapping(target = "fno", source = "facility.fno")
-    ManageDTO manage_To_DTO(Manage manage);
-    @Mapping(target = "admin.aid", source = "aid")
-    @Mapping(target = "facility.fno", source = "fno")
-    Manage manageDTO_To_Entity(ManageDTO manageDTO);
     
     StudentsDTO students_To_DTO(Students students);
     Students studentsDTO_To_Entity(StudentsDTO studentsDTO);
