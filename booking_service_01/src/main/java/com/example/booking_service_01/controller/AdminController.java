@@ -40,6 +40,14 @@ public class AdminController {
     @Autowired
     BookingService bookingService;
     
+    // 아이디 중복 확인
+    @PostMapping(path = "/check", produces = "application/json")
+    public ResponseEntity<?> sidCheck(@RequestBody LoginAdminDTO loginDTO) {
+        if (adminService.checkAid(loginDTO.getAid()))
+            return new ResponseEntity<>("id가 이미 존재합니다.",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     //singup
     @PostMapping(path = "/singup", produces = "application/json")
     public ResponseEntity<?> singupAdmin(@RequestBody AdminDTO adminDTO) {

@@ -27,6 +27,14 @@ public class StudentsController {
     @Autowired
     BookingService bookingService;
     
+    // 아이디 중복 확인
+    @PostMapping(path = "/check", produces = "application/json")
+    public ResponseEntity<?> sidCheck(@RequestBody LoginDTO loginDTO) {
+        if (studentsService.checkSid(loginDTO.getId()))
+            return new ResponseEntity<>("id가 이미 존재합니다.",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     //Sing up
     @PostMapping(path = "/signup", produces = "application/json")
     public ResponseEntity<?> singupStudent(@RequestBody StudentsDTO studentsDTO) {
