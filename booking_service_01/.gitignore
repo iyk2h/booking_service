@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### Test Code ###
-src/main/resources/httpTest/
+src/main/resources/
 
