@@ -68,6 +68,8 @@ public class BookingController {
         }
     }
 
+    //----------- public -------------//
+
     // 날자에 예약된 목록 조회
     @PostMapping(path="/{fno}/date", produces = "application/json")
     public ResponseEntity<?> bookingByDate(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO) {
