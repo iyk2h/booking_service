@@ -33,6 +33,7 @@ build/
 .vscode/
 
 ### Test Code ###
+src/main/resources/
 src/main/resources/httpTest/
 src/main/resources/application.properties
 
