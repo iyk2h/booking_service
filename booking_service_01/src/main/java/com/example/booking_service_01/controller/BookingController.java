@@ -75,12 +75,8 @@ public class BookingController {
     public ResponseEntity<?> bookingByDate(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO) {
         LocalDate date =bookingDTO.getDate();
         List<BookingDTO> bookingDTOs = bookingService.findBookingListByFacilityWhitDate(fno, date);
-        if(bookingDTOs.size()<=0) {
-            return new ResponseEntity<>("예약 날짜를 확인해 주세요.", HttpStatus.NOT_FOUND);
-        }
-        else {
-            return new ResponseEntity<>(bookingDTOs, HttpStatus.CREATED);
-        }
+
+        return new ResponseEntity<>(bookingDTOs, HttpStatus.CREATED);
     }
 
     //---------- students ------------//      
