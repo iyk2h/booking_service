@@ -2,9 +2,12 @@ package com.example.booking_service_01.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.example.booking_service_01.dto.FacilityDTO;
 import com.example.booking_service_01.service.BookingService;
 import com.example.booking_service_01.service.FacilityService;
+import com.example.booking_service_01.service.StudentsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +20,7 @@ public class HomeController {
     @Autowired
     FacilityService facilityService;
     @Autowired
-    BookingService bookingService;
+    StudentsService studentsService;
 
     //facility list
     @GetMapping(path="", produces = "application/json")
@@ -27,5 +30,13 @@ public class HomeController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(dtos, HttpStatus.OK);
-    }    
+    }
+    //check
+    @GetMapping(path = "/check", produces = "application/json")
+    public ResponseEntity<?> getCheck(HttpServletRequest request) {
+        if(studentsService.checkSessionSid(request)==null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
