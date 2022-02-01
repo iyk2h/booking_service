@@ -28,6 +28,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
+@ApiResponses({
+    @ApiResponse(code = 200, message = "get 성공"),
+    @ApiResponse(code = 201, message = "post 성공"),
+    @ApiResponse(code = 204, message = "반환 값 없는 상태"),
+    @ApiResponse(code = 400, message = "잘못된 요청 구문"),
+    @ApiResponse(code = 401, message = "로그인 필요한 상태"),
+    @ApiResponse(code = 404, message = "경로 혹은 입력값이 잘못된 상태"),
+    @ApiResponse(code = 500, message = "서버에러")
+})
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
