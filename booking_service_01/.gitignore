@@ -38,5 +38,6 @@ src/main/resources/httpTest/
 src/main/resources/application.properties
 *.xml
 
-
-
+deploy.sh
+nohub.out
+*.jar
