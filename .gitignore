@@ -1,4 +1,4 @@
- 
- deploy.sh
- nohub.out
- *.jar
+
+deploy.sh
+nohup.out
+board_web_00-0.0.1-SNAPSHOT.jar
