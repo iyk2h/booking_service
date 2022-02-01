@@ -50,6 +50,19 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
+    public String checkSessionAid(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String id = (String) session.getAttribute("id"); 
+        Admin admin = adminRepository.findByAid(id);
+        if(admin == null){
+            return id = null;
+        }
+        else {
+            return id;
+        }
+    }
+
+    @Override
     public String insertAdminDto(AdminDTO adminDTO) {
         Admin admin = BookingMapper.INSTANCE.adminDto_To_Entity(adminDTO);
         adminRepository.save(admin);
@@ -78,7 +91,5 @@ public class AdminServiceImpl implements AdminService{
         adminRepository.save(admin);
         return admin.getAid();
     }
-
- 
 
 }

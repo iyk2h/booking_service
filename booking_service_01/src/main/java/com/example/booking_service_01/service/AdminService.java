@@ -7,6 +7,7 @@ import com.example.booking_service_01.dto.AdminDTO;
 public interface AdminService {
     AdminDTO findByAid(String aid);
     String checkAdminRole(HttpServletRequest request);
+    String checkSessionAid(HttpServletRequest request);
     boolean checkAid(String aid);
     String insertAdminDto(AdminDTO adminDTO);
     void delete(AdminDTO admindDto);

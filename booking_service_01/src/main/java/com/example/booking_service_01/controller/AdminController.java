@@ -9,6 +9,8 @@ import javax.servlet.http.HttpSession;
 import com.example.booking_service_01.dto.AdminDTO;
 import com.example.booking_service_01.dto.BookingDTO;
 import com.example.booking_service_01.dto.FacilityDTO;
+import com.example.booking_service_01.dto.ForChangPW;
+import com.example.booking_service_01.dto.ForUpdateAdmin;
 import com.example.booking_service_01.dto.LoginAdminDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.service.AdminService;
@@ -88,19 +90,20 @@ public class AdminController {
 
     //Update   
     @PutMapping(path = "", produces = "application/json")
-    public ResponseEntity<?> updateAdmin(@RequestBody AdminDTO adminDTO, HttpServletRequest request) {
+    public ResponseEntity<?> updateAdmin(@RequestBody ForUpdateAdmin newDTO, HttpServletRequest request) {
         String aid = adminService.checkAdminRole(request);
         AdminDTO beforeDTO = adminService.findByAid(aid);
-        if(adminDTO != null){
-            String u_aid = adminDTO.getAid()!=null?aid:beforeDTO.getAid();
-            String u_pw = adminDTO.getPw()!=null?adminDTO.getPw():beforeDTO.getPw();
-            String u_phone = adminDTO.getPhone()!=null?adminDTO.getPhone():beforeDTO.getPhone();
-            String u_name = adminDTO.getName()!=null?adminDTO.getName():beforeDTO.getName();
-            String u_email = adminDTO.getEmail()!=null?adminDTO.getEmail():beforeDTO.getEmail();
+        if(beforeDTO != null){
+            if(!adminService.admin_login(aid, newDTO.getPw())){
+                return new ResponseEntity<>("비밀번호가 잘못 되었습니다.", HttpStatus.NOT_FOUND); 
+            }
+            String u_phone = newDTO.getPhone()!=null?newDTO.getPhone():beforeDTO.getPhone();
+            String u_name = newDTO.getName()!=null?newDTO.getName():beforeDTO.getName();
+            String u_email = newDTO.getEmail()!=null?newDTO.getEmail():beforeDTO.getEmail();
 
             AdminDTO updateDTO= AdminDTO.builder()
-                .aid(u_aid)
-                .pw(u_pw)
+                .aid(aid)
+                .pw(beforeDTO.getPw())
                 .phone(u_phone)
                 .name(u_name)
                 .email(u_email)
@@ -148,6 +151,25 @@ public class AdminController {
     public ResponseEntity<?> logoutAdmin(HttpServletRequest request) {
         request.getSession().invalidate();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //update Password
+    @PutMapping(path = "password",produces = "application/json")
+    public ResponseEntity<?> updateAdminPW(@RequestBody ForChangPW forChangPW, HttpServletRequest request) {
+        String aid = adminService.checkSessionAid(request);
+        AdminDTO adminDTO = adminService.findByAid(aid);
+        if(adminService.admin_login(aid, forChangPW.getOldPw())){ 
+            AdminDTO updateDTO = AdminDTO.builder()
+                .aid(aid)
+                .pw(forChangPW.getNewPw())
+                .phone(adminDTO.getPhone())
+                .name(adminDTO.getName())
+                .email(adminDTO.getEmail())
+                .build();
+            adminService.update(updateDTO);
+            return new ResponseEntity<>("성공",HttpStatus.CREATED);
+        }
+        return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
     }
 
     //-------------- manage students -------------//
