@@ -78,6 +78,9 @@ public class StudentsController {
         Integer sid = studentsService.checkSessionSid(request);
         StudentsDTO beforeDTO = studentsService.findBySid(sid);
         if(beforeDTO != null){
+            if(!studentsService.students_login(sid, newDTO.getPw())){
+                return new ResponseEntity<>("비밀번호가 잘못되었습니다.", HttpStatus.NOT_FOUND);
+            }
             String u_phone = newDTO.getPhone()!=null?newDTO.getPhone():beforeDTO.getPhone();
             String u_name = newDTO.getName()!=null?newDTO.getName():beforeDTO.getName();
 
@@ -100,15 +103,11 @@ public class StudentsController {
         Integer sid = studentsService.checkSessionSid(request);
         StudentsDTO studentsDTO = studentsService.findBySid(sid);
         if(studentsService.students_login(sid, forChangPW.getOldPw())){ 
-            Integer u_sid = studentsDTO.getSid();
-            String u_pw = forChangPW.getNewPw();
-            String u_phone = studentsDTO.getPhone();
-            String u_name = studentsDTO.getName();
             StudentsDTO updateDTO = StudentsDTO.builder()
-                .sid(u_sid)
-                .pw(u_pw)
-                .phone(u_phone)
-                .name(u_name)
+                .sid(sid)
+                .pw(forChangPW.getNewPw())
+                .phone(studentsDTO.getPhone())
+                .name(studentsDTO.getName())
                 .build();
             studentsService.update(updateDTO);
             return new ResponseEntity<>("성공",HttpStatus.CREATED);
