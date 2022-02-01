@@ -25,9 +25,5 @@ public class BookingDTO {
     private LocalDateTime startTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime endTime;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
-    @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime selectedTime;
     Integer maxHour;
 }

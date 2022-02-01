@@ -7,6 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.example.booking_service_01.dto.BookingDTO;
+import com.example.booking_service_01.dto.ForBooking;
+import com.example.booking_service_01.dto.ForFindDate;
 import com.example.booking_service_01.service.BookingService;
 import com.example.booking_service_01.service.FacilityService;
 import com.example.booking_service_01.service.StudentsService;
@@ -47,7 +49,7 @@ public class BookingController {
 
     //Booking facility, student
     @PostMapping(path="/{fno}", produces = "application/json")
-    public ResponseEntity<?> bookingFacilityStudent(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO,HttpServletRequest request)  {
+    public ResponseEntity<?> bookingFacilityStudent(@PathVariable("fno") Integer fno, @RequestBody ForBooking bookingDTO,HttpServletRequest request)  {
         Integer time = bookingDTO.getSelectedTime().getHour();
         Integer seletedHour = bookingDTO.getMaxHour();
         Integer sid = studentsService.checkSessionSid(request);
@@ -63,7 +65,6 @@ public class BookingController {
             if(bookingService.checkBookingTime(fno, start, end)) {
                 for( Integer i = 0; i <bookingDTO.getMaxHour(); i++) {
                 BookingDTO newBookingDTO = BookingDTO.builder()
-                    .bno(bookingDTO.getBno())
                     .sid(sid)
                     .fno(fno)
                     .startTime(start.plusHours(i))
@@ -84,10 +85,9 @@ public class BookingController {
 
     // 날자에 예약된 목록 조회
     @PostMapping(path="/{fno}/date", produces = "application/json")
-    public ResponseEntity<?> bookingByDate(@PathVariable("fno") Integer fno, @RequestBody BookingDTO bookingDTO) {
+    public ResponseEntity<?> bookingByDate(@PathVariable("fno") Integer fno, @RequestBody ForFindDate bookingDTO) {
         LocalDate date =bookingDTO.getDate();
         List<BookingDTO> bookingDTOs = bookingService.findBookingListByFacilityWhitDate(fno, date);
-
         return new ResponseEntity<>(bookingDTOs, HttpStatus.CREATED);
     }
 
