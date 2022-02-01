@@ -27,7 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
         filterRegistrationBean.setFilter(new AdminCheckFilter());
         filterRegistrationBean.setOrder(1);
         filterRegistrationBean.addUrlPatterns("/admin/*");
-        filterRegistrationBean.addUrlPatterns("/facility/*");
+        filterRegistrationBean.addUrlPatterns("/manage/*");
         return filterRegistrationBean;
     }
 
