@@ -3,6 +3,8 @@ package com.example.booking_service_01.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.example.booking_service_01.dto.ForChangPW;
+import com.example.booking_service_01.dto.ForUpdateStudents;
 import com.example.booking_service_01.dto.LoginDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
 import com.example.booking_service_01.service.BookingService;
@@ -72,18 +74,16 @@ public class StudentsController {
 
     //Update   
     @PutMapping(path = "", produces = "application/json")
-    public ResponseEntity<?> updateStudent(@RequestBody StudentsDTO studentsDTO, HttpServletRequest request) {
+    public ResponseEntity<?> updateStudent(@RequestBody ForUpdateStudents newDTO, HttpServletRequest request) {
         Integer sid = studentsService.checkSessionSid(request);
         StudentsDTO beforeDTO = studentsService.findBySid(sid);
-        if(studentsDTO != null){
-            Integer u_sid = studentsDTO.getSid()!=null?sid:beforeDTO.getSid();
-            String u_pw = studentsDTO.getPw()!=null?studentsDTO.getPw():beforeDTO.getPw();
-            String u_phone = studentsDTO.getPhone()!=null?studentsDTO.getPhone():beforeDTO.getPhone();
-            String u_name = studentsDTO.getName()!=null?studentsDTO.getName():beforeDTO.getName();
+        if(beforeDTO != null){
+            String u_phone = newDTO.getPhone()!=null?newDTO.getPhone():beforeDTO.getPhone();
+            String u_name = newDTO.getName()!=null?newDTO.getName():beforeDTO.getName();
 
             StudentsDTO updateDTO= StudentsDTO.builder()
-                .sid(u_sid)
-                .pw(u_pw)
+                .sid(sid)
+                .pw(beforeDTO.getPw())
                 .phone(u_phone)
                 .name(u_name)
                 .build();
@@ -94,6 +94,28 @@ public class StudentsController {
             return new ResponseEntity<>("Update fail", HttpStatus.BAD_REQUEST);
     }
     
+    //update Password
+    @PutMapping(path = "password",produces = "application/json")
+    public ResponseEntity<?> updateStudentPW(@RequestBody ForChangPW forChangPW, HttpServletRequest request) {
+        Integer sid = studentsService.checkSessionSid(request);
+        StudentsDTO studentsDTO = studentsService.findBySid(sid);
+        if(studentsService.students_login(sid, forChangPW.getOldPw())){ 
+            Integer u_sid = studentsDTO.getSid();
+            String u_pw = forChangPW.getNewPw();
+            String u_phone = studentsDTO.getPhone();
+            String u_name = studentsDTO.getName();
+            StudentsDTO updateDTO = StudentsDTO.builder()
+                .sid(u_sid)
+                .pw(u_pw)
+                .phone(u_phone)
+                .name(u_name)
+                .build();
+            studentsService.update(updateDTO);
+            return new ResponseEntity<>("성공",HttpStatus.CREATED);
+        }
+        return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+    }
+
     //Delete 탈퇴
     @DeleteMapping(path="", produces = "application/json")
     public ResponseEntity<?> deleteStudent(HttpServletRequest request) {
