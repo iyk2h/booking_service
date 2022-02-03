@@ -162,9 +162,6 @@ public class StudentsController {
     @GetMapping(path = "/booking", produces = "application/json")
     public ResponseEntity<?> bookingListByStudentSession(HttpServletRequest request) {
         Integer sid = studentsService.checkSessionSid(request);
-        if(sid == null) {
-            
-        }
         return new ResponseEntity<>(bookingService.findBySid(sid), HttpStatus.OK);
     }
 
