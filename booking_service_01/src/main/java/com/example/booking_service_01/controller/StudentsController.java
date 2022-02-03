@@ -3,6 +3,7 @@ package com.example.booking_service_01.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.example.booking_service_01.dto.BookingDTO;
 import com.example.booking_service_01.dto.ForChangPW;
 import com.example.booking_service_01.dto.ForUpdateStudents;
 import com.example.booking_service_01.dto.LoginDTO;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -152,5 +154,39 @@ public class StudentsController {
     public ResponseEntity<?> logoutStudent(HttpServletRequest request) {
         request.getSession().invalidate();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+       //---------- students ------------//      
+
+    // 사용자 자신이 예약한 리스트 보기
+    @GetMapping(path = "/booking", produces = "application/json")
+    public ResponseEntity<?> bookingListByStudentSession(HttpServletRequest request) {
+        Integer sid = studentsService.checkSessionSid(request);
+        if(sid == null) {
+            
+        }
+        return new ResponseEntity<>(bookingService.findBySid(sid), HttpStatus.OK);
+    }
+
+    // sid bno 
+    @GetMapping(path = "/booking/{bno}", produces = "application/json")
+    public ResponseEntity<?> bookingByBno(@PathVariable("bno") Integer bno,HttpServletRequest request) {
+        Integer sid = studentsService.checkSessionSid(request);
+        BookingDTO bookingDTO= bookingService.findByBnoSid(sid, bno);
+        if(bookingDTO != null) {
+            return new ResponseEntity<>(bookingDTO,HttpStatus.OK);
+        }
+        return new ResponseEntity<>("예약번호를 확인해주세요.",HttpStatus.NOT_FOUND);
+    }
+
+    // 예약 삭제
+    @DeleteMapping(path="/booking/{bno}", produces = "application/json")
+    public ResponseEntity<?> deleteBookingByBno(@PathVariable("bno") Integer bno, HttpServletRequest request) {
+        Integer sid = studentsService.checkSessionSid(request);
+        if(bookingService.checkByBnoSid(sid, bno)){
+            bookingService.deleteBooking(bno);
+            return new ResponseEntity<>("삭제되었습니다.",HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>("예약을 번호를 확인해 주세요.", HttpStatus.NOT_FOUND);
     }
 }

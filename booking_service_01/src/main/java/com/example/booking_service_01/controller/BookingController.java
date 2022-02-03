@@ -90,35 +90,4 @@ public class BookingController {
         List<BookingDTO> bookingDTOs = bookingService.findBookingListByFacilityWhitDate(fno, date);
         return new ResponseEntity<>(bookingDTOs, HttpStatus.CREATED);
     }
-
-    //---------- students ------------//      
-
-    // 사용자 자신이 예약한 리스트 보기
-    @GetMapping(path = "", produces = "application/json")
-    public ResponseEntity<?> bookingListByStudentSession(HttpServletRequest request) {
-        Integer sid = studentsService.checkSessionSid(request);
-        return new ResponseEntity<>(bookingService.findBySid(sid), HttpStatus.OK);
-    }
-
-    // sid bno 
-    @GetMapping(path = "/{bno}", produces = "application/json")
-    public ResponseEntity<?> bookingByBno(@PathVariable("bno") Integer bno,HttpServletRequest request) {
-        Integer sid = studentsService.checkSessionSid(request);
-        BookingDTO bookingDTO= bookingService.findByBnoSid(sid, bno);
-        if(bookingDTO != null) {
-            return new ResponseEntity<>(bookingDTO,HttpStatus.OK);
-        }
-        return new ResponseEntity<>("예약번호를 확인해주세요.",HttpStatus.NOT_FOUND);
-    }
-
-    // 예약 삭제
-    @DeleteMapping(path="/{bno}", produces = "application/json")
-    public ResponseEntity<?> deleteBookingByBno(@PathVariable("bno") Integer bno, HttpServletRequest request) {
-        Integer sid = studentsService.checkSessionSid(request);
-        if(bookingService.checkByBnoSid(sid, bno)){
-            bookingService.deleteBooking(bno);
-            return new ResponseEntity<>("삭제되었습니다.",HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>("예약을 번호를 확인해 주세요.", HttpStatus.NOT_FOUND);
-    }
 }
