@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import com.example.booking_service_01.dto.BookingDTO;
 import com.example.booking_service_01.dto.ForChangPW;
+import com.example.booking_service_01.dto.ForCheckIdDTO;
 import com.example.booking_service_01.dto.ForUpdateStudents;
 import com.example.booking_service_01.dto.LoginDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
@@ -61,6 +62,17 @@ public class StudentsController {
         }
         else{
             return new ResponseEntity<>("잘못 입력되었습니다.",HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // id check
+    @PostMapping(path = "/idcheck", produces = "application/json")
+    public ResponseEntity<?> StudentIdCheck (@RequestBody ForCheckIdDTO dto) {
+        if (studentsService.checkSid(dto.getSid())) {
+            return new ResponseEntity<>("id가 이미 존재합니다.",HttpStatus.BAD_REQUEST); 
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.CREATED); 
         }
     }
 
