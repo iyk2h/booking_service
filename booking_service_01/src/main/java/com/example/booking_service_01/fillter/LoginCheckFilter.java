@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LoginCheckFilter implements Filter{
     //예외
-    private static final String[] whitelist = {"/", "*/login", "*/logout","*/singup","*/idcheck","*/date","/css/*"};
+    private static final String[] whitelist = {"/", "*/login", "*/logout","*/signup","*/idcheck","*/date","/css/*"};
     
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
