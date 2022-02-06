@@ -5,7 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import com.example.booking_service_01.dto.BookingDTO;
 import com.example.booking_service_01.dto.ForChangPW;
-import com.example.booking_service_01.dto.ForCheckIdDTO;
+import com.example.booking_service_01.dto.ForCheckId;
 import com.example.booking_service_01.dto.ForUpdateStudents;
 import com.example.booking_service_01.dto.LoginDTO;
 import com.example.booking_service_01.dto.StudentsDTO;
@@ -67,8 +67,8 @@ public class StudentsController {
 
     // id check
     @PostMapping(path = "/idcheck", produces = "application/json")
-    public ResponseEntity<?> StudentIdCheck (@RequestBody ForCheckIdDTO dto) {
-        if (studentsService.checkSid(dto.getSid())) {
+    public ResponseEntity<?> StudentIdCheck (@RequestBody ForCheckId dto) {
+        if (studentsService.checkSid(dto.getId())) {
             return new ResponseEntity<>("id가 이미 존재합니다.",HttpStatus.BAD_REQUEST); 
         }
         else {
