@@ -40,7 +40,6 @@ public class AdminCheckFilter implements Filter{
         } finally {
         }
     }
- 
     private boolean isLoginCheckPath(String requestURI) {
         return !PatternMatchUtils.simpleMatch(whitelist, requestURI);
     }
