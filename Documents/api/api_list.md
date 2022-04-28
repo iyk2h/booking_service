@@ -1,1 +1,1 @@
-![image-20220428191352418](/Users/youngkyoonim/dev_dir/booking_service/images/image-20220428191352418.png)
+![image-20220428191352418](../../images/image-20220428191352418.png)
