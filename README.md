@@ -67,7 +67,7 @@
 > UI 준비중. 날자별 예약 조회  / 예약 취소
 
 
-<img src="../images/image-20220524220127449.png" alt="image-20220524220127449" style="zoom:50%;" />
+<img src="./images/image-20220524220127449.png" alt="image-20220524220127449" style="zoom:50%;" />
 
 ### 3. 시설관리
 
